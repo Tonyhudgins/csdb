@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const connection = new Sequelize('postgres://user:passwd@localhost:5432/csdb');
+const connection = new Sequelize('postgres://smozingo:xxxxxx@localhost:5432/csdb');
 
 connection
   .authenticate()
