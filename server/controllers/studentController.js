@@ -27,3 +27,4 @@ studentController.addStudent = (req, res, next) =>  {
 };
 
 module.exports = studentController;
+
