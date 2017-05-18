@@ -1,20 +1,3 @@
-/*const Sequelize = require('sequelize');
-
-const connection = new Sequelize('postgres://klazzmgh:2JAVSPQ4X0RpZ_XAyClXhbQwEmSy5Vf4@stampy.db.elephantsql.com:5432/klazzmgh');
-
-connection
-  .authenticate()
-  .then(err => {
-    console.log(`Connection to csdb database(${connection.config.database}) has been established successfully.`);
-  })
-  .catch(err => {
-    console.error(`Unable to connect to the ${connection.config.database} database: ${err}`);
-  });
-
-module.exports = connection;*/
-
-
-
 const pg = require('pg');
 
 // create a config to configure both pooling behavior
@@ -57,3 +40,60 @@ module.exports.query = function (text, values, callback) {
 module.exports.connect = function (callback) {
   return pool.connect(callback);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//const Sequelize = require('sequelize');
+//const bcrypt = require('bcryptjs');
+
+/*const User = connection.define('users', {
+  first_name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  last_name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  bio_img: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+}, {
+  hooks: {
+    afterValidate: (user) => {
+      user.password = bcrypt.hashSync(user.password, 8);
+    },
+  },
+});*/
+
+//User.sync();
+// .then(() => {
+//   User.create({
+//     first_name: 'Rodrigo',
+//     last_name: 'Leme',
+//     password: 'pig',
+//   });
+// });
+
+/*const pg = require('pg');
+const connectionString = process.env.DATABASE_URL || 'postgres://klazzmgh:2JAVSPQ4X0RpZ_XAyClXhbQwEmSy5Vf4@stampy.db.elephantsql.com:5432/klazzmgh';
+
+const client = new pg.Client(connectionString);
+client.connect();
+
+module.exports = User;*/
+
+

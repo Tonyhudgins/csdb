@@ -19,11 +19,19 @@ class App extends Component {
 
   componentDidMount() {
     const studentArr = [];
+    console.log('in CDM, doing post');
 
-    $.get('/bioImg', (data) => {
-      data.forEach(student => studentArr.push(student));
-      this.setState({ students: studentArr });
-    });
+    $.post('http://localhost:3000/bioImg', { cohort_id: 1 })
+      .done((data) => {
+        console.log('data', data);
+        data.forEach(student => studentArr.push(student));
+        this.setState({ students: studentArr });
+      })
+      .fail((err) => {
+        console.log('failed post ', err);
+      });
+
+    //console.log('state', this.state);
   }
 
   // functions
@@ -48,6 +56,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <h1>Hello World!</h1>
         <Menu addUser={this.addUser}
               className="menu" />
 

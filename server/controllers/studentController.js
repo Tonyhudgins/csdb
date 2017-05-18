@@ -1,19 +1,29 @@
-const User = require('../models/userModel');
+const csdb = require('../models/csdbModel');
 
-function getUsers(req, res) {
-  User.findAll().then((users) => {
-    res.status(200).send(users);
-  });
-}
+const studentController = {};
 
-function addUser(req, res) {
-  User.create({
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    password: req.body.password,
-  })
-  .then(() => res.send('User added'))
-  .catch(err => res.send(err));
-}
+studentController.getBioImages = (req, res, next) =>  {
+  csdb.query(
+    'SELECT student_id, first_name, last_name, bio_img ' +
+    'FROM student ' +
+    'WHERE cohort_id = $1',
+    [req.body.cohort_id],
+    function (err, result) {
+      if (err) {
+        return res.status(401).send('Fetch failed for bio images');
+      } else {
+        res.studentData = result.rows;
+        next();
+      }
+    });
+};
 
-module.exports = { getUsers, addUser };
+studentController.addStudent = (req, res, next) =>  {
+  csdb.query(
+    'INSERT INTO student(first_name, last_name, bio_img, cohort_id)' +
+    ' values($1, $2, $3, $4)',
+    [req.params.first_name, req.params.last_name, req.params.bio_img, req.params.cohort_id]);
+  next();
+};
+
+module.exports = studentController;
