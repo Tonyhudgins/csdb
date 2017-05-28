@@ -25,8 +25,8 @@ app.post('/addStudent',
   }
 );
 
-console.log('server listening on port 3000');
+console.log(new Date() + ' server listening on port 8080');
 
-app.listen(3000);
+app.listen(8080);
 
 module.exports = app;
