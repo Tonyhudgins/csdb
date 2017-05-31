@@ -25,6 +25,29 @@ app.post('/addStudent',
   }
 );
 
+app.get('/campusList',
+  studentController.getCampusList,
+  (req, res) => {
+    res.status(200).json(res.campusList);
+  }
+);
+
+app.post('/programList',
+  studentController.getProgramList,
+  (req, res) => {
+    res.status(200).json(res.programList);
+  }
+);
+
+app.post('/cohortList',
+  studentController.getCohortList,
+  (req, res) => {
+    res.status(200).json(res.cohortList);
+  }
+);
+
+app.get('*', (req, res) => res.redirect('http://localhost:8080/'));
+
 console.log(new Date() + ' server listening on port 8080');
 
 app.listen(8080);

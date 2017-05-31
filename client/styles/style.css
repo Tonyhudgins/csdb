@@ -204,43 +204,32 @@ a {
     height: 100% !important;
 }
 
-.myButton {
-	-moz-box-shadow: 0px 10px 14px -7px #7b9db7;
-	-webkit-box-shadow: 0px 10px 14px -7px #7b9db7;
-	box-shadow: 0px 10px 14px -7px #7b9db7;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #4d6475), color-stop(1, #7b9db7));
-	background:-moz-linear-gradient(top, #4d6475 5%, #7b9db7 100%);
-	background:-webkit-linear-gradient(top, #4d6475 5%, #7b9db7 100%);
-	background:-o-linear-gradient(top, #4d6475 5%, #7b9db7 100%);
-	background:-ms-linear-gradient(top, #4d6475 5%, #7b9db7 100%);
-	background:linear-gradient(to bottom, #4d6475 5%, #7b9db7 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4d6475', endColorstr='#7b9db7',GradientType=0);
-	background-color:#4d6475;
-	-moz-border-radius:8px;
-	-webkit-border-radius:8px;
-	border-radius:8px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:20px;
-	font-weight:bold;
-	padding:13px 32px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #7b9db7;
-}
-.myButton:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7b9db7), color-stop(1, #4d6475));
-	background:-moz-linear-gradient(top, #7b9db7 5%, #4d6475 100%);
-	background:-webkit-linear-gradient(top, #7b9db7 5%, #4d6475 100%);
-	background:-o-linear-gradient(top, #7b9db7 5%, #4d6475 100%);
-	background:-ms-linear-gradient(top, #7b9db7 5%, #4d6475 100%);
-	background:linear-gradient(to bottom, #7b9db7 5%, #4d6475 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7b9db7', endColorstr='#4d6475',GradientType=0);
-	background-color:#7b9db7;
+#cpcMenu {
+    width: 630px;
+    margin: 10px auto;
 }
 
-.myButton:active {
-	position:relative;
-	top:1px;
+.cs-select {
+    font-family: 'Ubuntu Light', sans-serif;
+    font-weight: lighter;
+    border: 0;
+    color: #0398db;
+    outline: 0;
+    background: transparent;
+    font-size: 20px;
+    padding: 2px 10px;
+    width: 200px;
 }
+
+.cs-selection {
+    float: left;
+    border: 0;
+    margin: 5px;
+    overflow: hidden;
+    width: 200px;
+    -moz-border-radius: 9px 9px 9px 9px;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 9px 9px 9px 9px;
+    box-shadow: 4px 2px 11px rgba(0, 0, 0, 0.2);
+}
+

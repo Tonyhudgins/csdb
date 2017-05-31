@@ -1,56 +1,58 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import StudentFlashcard from './StudentFlashcard.jsx';
+import CohortContainer from './CohortContainer.jsx';
 import Carousel from 'nuka-carousel';
+import getStudentFacecardsThunk from '../actions/creators/facecardsActions';
 
-const Facecards = ({ showName, students }) => {
+class Facecards extends Component {
+  constructor(props) {
+    super(props);
+    console.log(`In Facecards. Props:${Object.keys(props)}`);
+  /*  flashcards: [];
+    studentList: [];*/
+  }
 
-  console.log('In Facecards');
-
-  // shuffle the students
-  function shuffleArray(students) {
-    for (let i = students.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      let temp = students[i];
-      students[i] = students[j];
-      students[j] = temp;
+  /*buildFacecards = function(flashcards) {
+    for (let i = 0; i < this.studentList.length; i++) {
+      flashcards[i] = (
+        <StudentFlashcard
+          key={i}
+          id={i}
+          showName={showName}
+          firstName={studentList[i].first_name}
+          lastName={studentList[i].last_name}
+          img={studentList[i].bio_img}
+        />
+      );
     }
-
-    return students;
-  }
-
-  const studentList = shuffleArray(students);
-
-  const flashcards = [];
-
-  for (let i = 0; i < studentList.length; i++) {
-    flashcards[i] = (
-      <StudentFlashcard
-        key={i}
-        id={i}
-        showName={showName}
-        firstName={studentList[i].first_name}
-        lastName={studentList[i].last_name}
-        img={studentList[i].bio_img}
-      />
-    );
-  }
-
-  return (
-    <section id="facecards" className="container">
-      <div className="row person">
-        <Carousel>
-          {flashcards}
-        </Carousel>
-      </div>
-
-      <div className="row">
-        <div className="info">
-          <div className="logo">CODESMITH<span className="blue">FACECARDS</span></div>
-          <div className="cohort">COHORT<span className="blue">14</span></div>
+  };
+*/
+  render() {
+    return (
+    <CohortContainer>
+      <section id="facecards" className="container">
+        <div className="row person">
+          <Carousel>
+            {this.flashcards}
+          </Carousel>
         </div>
-      </div>
-    </section>
-  );
-};
 
-export default Facecards;
+        <div className="row">
+          <div className="info">
+            <div className="logo">CODESMITH<span className="blue">FACECARDS</span></div>
+            <div className="cohort">COHORT<span className="blue">14</span></div>
+          </div>
+        </div>
+      </section>
+    </CohortContainer>
+    );
+  };
+}
+
+const mapStateToProps    = store    => ({ students: store.facecardsState.students });
+const mapDispatchToProps = dispatch => ({
+  clickHandler: cohortId => { dispatch(getStudentFacecardsThunk(cohortId)); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Facecards);
