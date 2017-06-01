@@ -13,11 +13,11 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
   campuses: [],
-  campusesById: {},
+  campusesById: [],
   programs: [],
-  programsById: {},
+  programsById: [],
   cohorts: [],
-  cohortsById: {},
+  cohortsById: [],
   currentCampus: 0,
   currentProgram: 0,
   currentCohort: 0,
@@ -25,7 +25,7 @@ const initialState = {
 
 const cohortReducer = function (state = initialState, action) {
   console.log(`in cohortReducer.  Action: ${action.type}`);
-  console.log('details:', Object.keys(action), action.payload);
+  console.log('cohortReducer details:', Object.keys(action), action.payload);
   switch (action.type) {
     case types.SET_CAMPUS_LIST:
       return Object.assign({}, state,
@@ -55,7 +55,7 @@ const cohortReducer = function (state = initialState, action) {
     case types.SET_CURRENT_COHORT:
       return Object.assign({}, state, { currentCohort: action.payload });
     default:
-      console.log(`cohortReducer recieved unhandled action ${action.type}`);
+      //console.log(`cohortReducer recieved unhandled action ${action.type}`);
       return state;
   }
 };

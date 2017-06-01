@@ -9,7 +9,7 @@
  * ************************************
  */
 
-export const GET_FACECARDS = 'GET_FACECARDS';
+export const SET_FACECARDS = 'SET_FACECARDS';
 export const FETCH_ERROR   = 'FETCH_ERROR';
 export const SET_CAMPUS_LIST  = 'SET_CAMPUS_LIST';
 export const SET_PROGRAM_LIST = 'SET_PROGRAM_LIST';

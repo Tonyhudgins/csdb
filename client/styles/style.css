@@ -36,7 +36,7 @@ a {
     font-family: 'Ubuntu Light', 'Century Gothic', sans-serif;
     letter-spacing: .5em;
     color: #393939;
-    margin: 95px auto;
+    margin: 25px auto;
     height: 560px;
     width: 758px;
     box-shadow: 10px 15px 39px rgba(0, 0, 0, .2);
@@ -168,6 +168,28 @@ a {
 #newCohort {
     height: 90%;
     width: 90%;
+}
+
+#cohortDashboard {
+    height: 50px;
+}
+
+#playFacecards {
+    width: 75px;
+    height: 75px;
+    text-align: center;
+    padding-top: 21px;
+    margin: 0 auto;
+    background-color: #f1f1f1;
+    border-radius: 50px;
+    border: 5px solid rgba(169, 169, 169, 0.18);
+    color: darkgrey;
+    font-size: 1.3em;
+    cursor: pointer;
+}
+
+#playFacecards:hover {
+    color: black;
 }
 
 .info {

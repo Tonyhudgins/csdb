@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import CampusSelect from './CampusSelect.jsx';
 import ProgramSelect from './ProgramSelect.jsx';
 import CohortSelect from './CohortSelect.jsx';
 
 
 const CohortContainer = (props) => (
-    <div id="cohortDashboard" className="container">
+    <div id="cohortDashboard">
       <header>
         <div id="cpcMenu">
           <CampusSelect/>

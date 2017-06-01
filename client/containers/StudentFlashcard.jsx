@@ -1,11 +1,12 @@
 import React from 'react';
 
 const StudentFlashcard = (props) => {
-  const img = './client/assets/images/' + props.img;
-
+  console.log('SCHNO rendering StudentFlashcard');
   const showName = (event) => {
-    const first = document.querySelector('#' + event.target.parentElement.id + ' > span.first');
-    const last = document.querySelector('#' + event.target.parentElement.id + ' > span.last');
+    let id = event.target.id.slice(8);
+    console.log(`SCHNO ID ${id}`);
+    const first = document.querySelector('#first' + id);
+    const last = document.querySelector('#last' + id);
 
     // hide the '?' and show the first and last names
     event.target.classList.add('hidden');
@@ -13,13 +14,22 @@ const StudentFlashcard = (props) => {
     last.classList.remove('hidden');
   };
 
+  // reset hidden names -- these don't reset on re-render :(
+  if (document.querySelector(`#question${props.id}`)) {
+    document.querySelector(`#first${props.id}`).classList.add('hidden');
+    document.querySelector(`#last${props.id}`).classList.add('hidden');
+    document.querySelector(`#question${props.id}`).classList.remove('hidden');
+  }
+
   return (
-    <div id={'card' + props.id} >
-      <div id={'name' + props.id} className="name" onClick={showName}>
-        <span id={'question' + props.id} className="question">?</span>
-        <span className="first hidden">{props.firstName}</span> <span className="last blue hidden">{props.lastName}</span></div>
+    <div id={`card${props.id}`} >
+      <div id={`name${props.id}`} className="name" onClick={showName}>
+        <span id={`question${props.id}`} className="question">?</span>
+        <span id={`first${props.id}`} className={'first hidden'}>{props.firstName} </span>
+        <span id={`last${props.id}`} className={'last blue hidden'}>{props.lastName}</span>
+      </div>
       <div className="row">
-        <div><img className='image' src={img}/></div>
+        <div><img className='image' src={props.img}/></div>
       </div>
     </div>
   );

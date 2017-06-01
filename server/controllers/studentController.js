@@ -7,7 +7,7 @@ studentController.getBioImages = (req, res, next) =>  {
     'SELECT student_id, first_name, last_name, bio_img ' +
     'FROM student ' +
     'WHERE cohort_id = $1',
-    [req.body.cohort_id],
+    [req.body.cohortId],
     function (err, result) {
       if (err) {
         return res.status(401).send('Fetch failed for bio images');

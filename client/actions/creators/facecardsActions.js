@@ -10,8 +10,8 @@
  */
 import * as types from '../actionTypes';
 
-const getStudentFacecards = (students) => ({
-    type: types.GET_FACECARDS,
+const setStudentFacecards = (students) => ({
+    type: types.SET_FACECARDS,
     payload: students,
   });
 
@@ -35,37 +35,44 @@ const shuffleArray = students => {
   return shuffled;
 };
 
-// fetch the student data from the server
-const getStudentList = cohortId => (
-  new Promise((resolve, reject) => {
-    fetch('http://localhost:8080/bioImg',
-      {
-        method: 'post',
-        data: { cohort_id: cohortId },
-      })
-      .then(responseData => {
-        console.log(`fetch success: ${responseData}`);
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response);
+  } else {
+    return Promise.reject(new Error(response.statusText));
+  }
+}
 
-        // shuffle the results and set the img location before we send them off
-        const students = shuffleArray(responseData).map(student => {
-          student.img = './client/assets/images/' + student.img;
-          return student;
-        });
+function json(response) {
+  return response.json();
+}
 
-        return resolve(students);
+const fetchStudentFacecardsThunk = (cohortId) => dispatch => {
+  console.log(`in fetchStudentFacecardsThunk - cohortId:${cohortId}`);
 
-      })
-      .catch(err => reject(err));
-  })
-);
+  // fetch the student data from the server
+  const headers = new Headers({ 'Content-Type': 'application/json' });
+  fetch('http://localhost:8080/bioImg',
+    {
+      method: 'post',
+      headers,
+      body: JSON.stringify({ cohortId: cohortId }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('fetch FACECARDS: responseData', responseData);
 
-const getStudentFacecardsThunk = (cohortId = 1) => dispatch => {
-  console.log(`in getStudentsFacecardsThunk`);
+      // shuffle the results and set the img location before we send them off
+      const students = shuffleArray(responseData);
+      students.forEach(student => {
+        student.img = `./client/assets/images/${cohortId}/${student.bio_img}`;
+      });
 
-  // fetch the student list from csdb and dispatch accordingly
-  getStudentList(cohortId)
-    .then(students => dispatch(getStudentFacecards(students)))
-    .catch(err     => dispatch(fetchError(err)));
+      dispatch(setStudentFacecards(students));
+
+    })
+    .catch(err => dispatch(fetchError(err)));
 };
 
-export default getStudentFacecardsThunk;
+export default fetchStudentFacecardsThunk;
