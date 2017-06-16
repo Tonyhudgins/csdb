@@ -13,12 +13,14 @@ import { combineReducers } from 'redux';
 
 // Reducers
 import facecardsReducer from './facecardsReducer';
-import cohortReducer from './cohortReducer';
+import cpcReducer from './cpcReducer';
+import addEditReducer from './addEditReducer';
 
 // Combine reducers
 const reducers = combineReducers({
   facecardsState: facecardsReducer,
-  cohortState: cohortReducer,
+  cpcState: cpcReducer,
+  addEditState: addEditReducer,
 });
 
 export default reducers;

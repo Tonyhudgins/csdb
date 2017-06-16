@@ -18,7 +18,7 @@ const initialState = {
 
 const facecardsReducer = function (state = initialState, action) {
   console.log(`in facecardsReducer.  Action: ${action.type}`);
-  console.log('facecardsReducer details:', Object.keys(action), action.payload);
+  console.log(`details: ${JSON.stringify(action)}`);
   switch (action.type) {
     case types.SET_FACECARDS:
       return Object.assign({}, state, { students: action.payload });

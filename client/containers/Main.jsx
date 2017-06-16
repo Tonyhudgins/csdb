@@ -1,7 +1,7 @@
 import React from 'react';
-import Facecards from './Facecards.jsx';
+import Facecards from './facecards/Facecards.jsx';
 import Profile from './Profile.jsx';
-import NewCohort from './NewCohort.jsx';
+import NewCohort from './addEdit/AddEditTabs.jsx';
 import { Switch, Route } from 'react-router-dom';
 
 const Main = (props) => {

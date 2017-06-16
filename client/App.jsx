@@ -16,32 +16,10 @@ import Main from './containers/Main.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
+
     // function bindings
     this.uploadCohortFile = this.uploadCohortFile.bind(this);
   }
-
-  componentDidMount() {
-    const studentArr = [];
-
-    // NOTE: This should be moved to the Facecards component
-    // when we get Redux working!!!
-    // Grab all student bio images from csdb
-/*    $.post('http://localhost:8080/bioImg', { cohort_id: 1 })
-      .done((data) => {
-
-        data.forEach(student => {
-          student.img = './client/assets/images/' + student.img;
-          studentArr.push(student);
-        });
-
-        this.setState({ students: studentArr });
-      })
-      .fail((err) => {
-        console.log('failed post ', err);
-      });*/
-  }
-
-
 
   uploadCohortFile(event) {
     console.log('in ucf');

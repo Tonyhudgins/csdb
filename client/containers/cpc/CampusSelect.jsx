@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Option from '../components/Option.jsx';
-import * as actions from '../actions/creators/cohortContainerActions';
+import Option from '../../components/Option.jsx';
+import * as actions from '../../actions/creators/cpcContainerActions';
 
 const mapStateToProps = store => ({
-  campuses:       store.cohortState.campuses,
-  campusesById:   store.cohortState.campusesById,
-  currentCampus:  store.cohortState.currentCampus,
+  campuses:       store.cpcState.campuses,
+  campusesById:   store.cpcState.campusesById,
+  currentCampus:  store.cpcState.currentCampus,
 });
 
 const mapDispatchToProps = dispatch => ({
-  getCampusList: () => { dispatch(actions.fetchCampusListThunk()); },
+  getCampuses: () => { dispatch(actions.fetchCampusListThunk('fetchAll')); },
 
   handleCampusChange: (event) => {
-    //console.log('CampusSelect handleCampusChange - campusId:', event.target.value);
-    dispatch(actions.setCurrentCampusFetchPrograms(event.target.value));
+    console.log('CampusSelect handleCampusChange - campusId:', event.target.value);
+    dispatch(actions.setCurrentCampusFetchPrograms(event.target.value, 'fetchAll'));
   },
 });
 
@@ -25,7 +25,7 @@ class CampusSelect extends Component {
 
   componentWillMount() {
     // Grab campus data from csdb
-    this.props.getCampusList();
+    this.props.getCampuses();
   }
 
   render() {
@@ -38,7 +38,7 @@ class CampusSelect extends Component {
 
     return (
       <div className="cs-selection">
-        <select id="campusSelect" className="cs-select"
+        <select id="fetchAllCampusSelect" className="cs-select"
                 onChange={this.props.handleCampusChange}>
           {this.campusOptions}
         </select>

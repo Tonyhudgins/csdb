@@ -46,7 +46,7 @@ const Menu = (props) => (
       <section id="menuAdmin">
         <h1>Admin</h1>
         <ul>
-          <li><Link to="/newCohort">Cohort Creation</Link></li>
+          <li><Link to="/newCohort">CS Admin Portal</Link></li>
           <li>Financials</li>
           <li>Hiring Partners</li>
         </ul>

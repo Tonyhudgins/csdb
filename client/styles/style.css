@@ -17,6 +17,11 @@ a {
     color: #4592c3;
 }
 
+#menu a:active {
+    text-decoration: none;
+    color: orange;
+}
+
 #logoDashboard {
     position: relative;
     float: left;
@@ -31,14 +36,14 @@ a {
 .container {
     background-color: #FFF;
     position: relative;
-    display: flex;
-    flex-direction: column;
+ /*   display: flex;
+    flex-direction: column;*/
     font-family: 'Ubuntu Light', 'Century Gothic', sans-serif;
     letter-spacing: .5em;
     color: #393939;
-    margin: 25px auto;
-    height: 560px;
-    width: 758px;
+ /*   margin: 25px auto;
+    height: 80%;
+    width: 80%;*/
     box-shadow: 10px 15px 39px rgba(0, 0, 0, .2);
 }
 
@@ -90,6 +95,10 @@ a {
     color: #4592c3;
 }
 
+#menu a:hover {
+    text-decoration: none;
+}
+
 #menu ul {
     margin-left: 20px;
     list-style: none;
@@ -97,15 +106,15 @@ a {
 }
 
 #menuStudentProfiles {
-    height: 210px;
+    height: 170px;
 }
 
 #menuCohortDashboards {
-    height: 160px;
+    height: 120px;
 }
 
 #menuReports {
-    height: 160px;
+    height: 120px;
 }
 
 #menuAlumni {
@@ -143,9 +152,9 @@ a {
 }
 
 .image {
-    margin: 200px 270px;
-    height: 220px;
-    width: 220px;
+    margin: 200px auto 100px;
+    height: 320px;
+    width: 320px;
     border-radius: 50%;
     background-color: #F1F1F1;
     background-size: 100%;
@@ -170,7 +179,7 @@ a {
     width: 90%;
 }
 
-#cohortDashboard {
+#cpcDashboard {
     height: 50px;
 }
 
@@ -192,6 +201,11 @@ a {
     color: black;
 }
 
+.facecardImg {
+    width: 335px;
+    margin: 0 auto;
+}
+
 .info {
     position: absolute;
     bottom: 67px;
@@ -211,15 +225,6 @@ a {
 
 .blue {
     color: #4592c3
-}
-
-
-.btn {
-  position: relative;
-  top: -50px;
-  /*padding: 100px;*/
-  margin: 0 auto;
-  text-align: center;
 }
 
 .slider-frame {
@@ -255,3 +260,110 @@ a {
     box-shadow: 4px 2px 11px rgba(0, 0, 0, 0.2);
 }
 
+#addEditContainer {
+    padding: 12px;
+}
+
+.tabs-1 .tab-links {
+    margin: 0;
+    padding: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 35px;
+    position: relative;
+    top: 4px;
+    left: 17px;
+}
+
+.tabs-1 .tab-link {
+    color: darkgray;
+    font-weight: bold;
+    line-height: 31px;
+    height: 35px;
+    border: 1px solid lightgray;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-left: none;
+    border-top: none;
+    box-shadow: 0px -2px 6px -1px rgba(0,0,0,.2);
+    padding: 0 15px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    left: 0px;
+    top: -4px;
+}
+
+.tab-link:hover {
+    color: #0398db;
+}
+
+.tabs-1 .tab-link-active {
+    font-weight: bold;
+    color: #393939;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: white;
+    box-shadow: 6px -3px 7px -1px rgba(0,0,0,.1), -6px -3px 7px -1px rgba(0,0,0,.1);
+}
+
+.tabs-1 .content {
+    padding: 15px;
+    height: 93%;
+    box-shadow: 8px -2px 40px 10px rgba(0,0,0,.2);
+    width: 97%;
+    margin: 0 auto;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    letter-spacing: .1em;
+}
+
+.tabs-1 .tabContent {}
+
+
+.activeLinkStyle {
+  /*  border-bottom: 2px solid #333;*/
+}
+
+.visibleTabStyle {
+    display: inline-block;
+}
+
+.input-group-addon {
+    font-weight: lighter;
+}
+
+.dropzone {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: black;
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+/*
+#campusName {
+    width: 900px;
+}
+
+#address1, #address2 {
+    width: 750px;
+}
+
+#city {
+
+}
+
+#state {
+
+}
+
+#zipCode {
+    width: 150px;
+}*/

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Option from '../components/Option.jsx';
-import * as actions from '../actions/creators/cohortContainerActions';
+import Option from '../../components/Option.jsx';
+import * as actions from '../../actions/creators/cpcContainerActions';
 
 const mapStateToProps = store => ({
-  programs:       store.cohortState.programs,
-  programsById:   store.cohortState.programsById,
-  currentProgram: store.cohortState.currentProgram,
+  programs:       store.cpcState.programs,
+  programsById:   store.cpcState.programsById,
+  currentProgram: store.cpcState.currentProgram,
 });
 
 const mapDispatchToProps = dispatch => ({
-  getProgramList: (currentCampus) => { dispatch(actions.fetchProgramListThunk(currentCampus)); },
+  getPrograms: (currentCampus) => { dispatch(actions.fetchProgramListThunk(currentCampus), 'fetchAll'); },
 
   handleProgramChange: (event) => {
     //console.log('ProgramSelect handleProgramChange - programId:', event.target.value);
-    dispatch(actions.setCurrentProgramFetchCohorts(event.target.value));
+    dispatch(actions.setCurrentProgramFetchCohorts(event.target.value, 'fetchAll'));
   },
 });
 
@@ -31,7 +31,7 @@ const ProgramSelect = (props) => {
   //console.log('ProgramSelect: rendering ProgramSelect', props.programs.length, programOptions);
   return (
     <div className="cs-selection">
-      <select id="programSelect" className="cs-select"
+      <select id="fetchAllProgramSelect" className="cs-select"
               onChange={props.handleProgramChange}>
         {programOptions}
       </select>

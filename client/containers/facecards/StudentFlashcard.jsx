@@ -23,13 +23,13 @@ const StudentFlashcard = (props) => {
 
   return (
     <div id={`card${props.id}`} >
-      <div id={`name${props.id}`} className="name" onClick={showName}>
-        <span id={`question${props.id}`} className="question">?</span>
+      <div id={`name${props.id}`} className="name">
+        <span id={`question${props.id}`} className="question" onClick={showName}>?</span>
         <span id={`first${props.id}`} className={'first hidden'}>{props.firstName} </span>
         <span id={`last${props.id}`} className={'last blue hidden'}>{props.lastName}</span>
       </div>
-      <div className="row">
-        <div><img className='image' src={props.img}/></div>
+      <div className="facecardImg">
+        <img className='image' src={props.img}/>
       </div>
     </div>
   );

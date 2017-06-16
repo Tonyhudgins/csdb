@@ -3,9 +3,8 @@ import CampusSelect from './CampusSelect.jsx';
 import ProgramSelect from './ProgramSelect.jsx';
 import CohortSelect from './CohortSelect.jsx';
 
-
-const CohortContainer = (props) => (
-    <div id="cohortDashboard">
+const cpcContainer = (props) => (
+    <div id="cpcDashboard">
       <header>
         <div id="cpcMenu">
           <CampusSelect/>
@@ -16,5 +15,5 @@ const CohortContainer = (props) => (
     </div>
 );
 
-export default CohortContainer;
+export default cpcContainer;
 

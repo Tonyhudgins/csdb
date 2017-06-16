@@ -18,31 +18,45 @@ app.post('/bioImg',
   }
 );
 
-app.post('/addStudent',
-  studentController.addStudent,
+app.post('/createStudent',
+  studentController.createStudent,
   (req, res) => {
     res.status(200).send('success!');
   }
 );
 
 app.get('/campusList',
-  studentController.getCampusList,
+  studentController.getCampuses,
   (req, res) => {
     res.status(200).json(res.campusList);
   }
 );
 
 app.post('/programList',
-  studentController.getProgramList,
+  studentController.getPrograms,
   (req, res) => {
     res.status(200).json(res.programList);
   }
 );
 
 app.post('/cohortList',
-  studentController.getCohortList,
+  studentController.getCohorts,
   (req, res) => {
     res.status(200).json(res.cohortList);
+  }
+);
+
+app.post('/studentList',
+  studentController.getStudents,
+  (req, res) => {
+    res.status(200).json(res.studentList);
+  }
+);
+
+app.post('/updateStudent',
+  studentController.updateStudent,
+  (req, res) => {
+    res.status(200).send('success!');
   }
 );
 
