@@ -336,17 +336,46 @@ a {
 }
 
 .dropzone {
-    font-size: 1.25em;
-    font-weight: 700;
-    color: black;
-    width: 300px;
-    height: 300px;
+    color: #635563;
+    width: 200px;
+    height: 200px;
+    text-align: center;
     display: inline-block;
     cursor: pointer;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid #cccccc;
+    padding: 10px;
 }
 
+.dropzonePreview {
+    position: relative;
+    z-index: 1;
+    width: 180px;
+    height: 180px;
+    border-radius: 5px;
+    border: 1px solid darkgrey;
+}
+
+.dropzonePlus {
+    font-size: 3em;
+    padding-top:10px;
+}
+
+.picUploadOverlay {
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    z-index: 5;
+    border-radius: 5px;
+}
+
+.bioPicUploadOverlay {
+    background-image: url(../assets/images/bioPicUploadOverlay.png);
+}
+
+.csPicUploadOverlay {
+    background-image: url(../assets/images/csPicUploadOverlay.png);
+}
 /*
 #campusName {
     width: 900px;

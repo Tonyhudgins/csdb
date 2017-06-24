@@ -56,8 +56,15 @@ app.post('/studentList',
 app.post('/updateStudent',
   studentController.updateStudent,
   (req, res) => {
-    res.status(200).send('success!');
+    res.status(200).send({"message": "Student updated"});
   }
+);
+
+app.post('/imageUpload',
+    studentController.updateImage,
+    (req, res) => {
+    res.status(200).send({"message": "Image updated"});
+    }
 );
 
 app.get('*', (req, res) => res.redirect('http://localhost:8080/'));

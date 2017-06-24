@@ -1,4 +1,7 @@
 const csdb = require('../models/csdbModel');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
 
 const studentController = {};
 
@@ -214,6 +217,42 @@ studentController.updateStudent = (req, res, next) => {
       } else {
         console.log('update success', result);
         next();
+      }
+    });
+};
+
+studentController.updateImage = (req, res, next) => {
+  console.log('in updateImage');
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields, files) => {
+    if(err) {
+      return res.status(500).send(err);
+    } else {
+      // update the database
+      const sql = buildUpdate('UPDATE student set',
+          {[fields.image_type]: fields.name},
+          {'student_id': fields.student_id});
+
+      csdb.query(
+        sql.queryString,
+        [...sql.values],
+        function (err, result) {
+          if (err) {
+            console.log('failed', err);
+            return res.status(400).send(err);
+          } else {
+            const source = files.image.path;
+            const dest = path.join(__dirname, '../../client/assets/images/' + fields.cohort_id + '/' + fields.name);
+            console.log('fields', fields);
+            fs.rename(source, dest, (err) => {
+                if (err) throw err;
+                console.log(`successfully moved ${source} to ${dest}`);
+                next();
+            });
+          }
+        });
+
+
       }
     });
 };

@@ -1,37 +1,48 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
+import { connect } from 'react-redux';
+import * as cpcActions from '../actions/creators/cpcContainerActions';
+
+const mapStateToProps = store => ({
+    studentsById:   store.cpcState.studentsById,
+    currentStudent: store.cpcState.currentStudent,
+    currentCohort:  store.cpcState.currentCohort,
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onDrop: (files, image_type, student_id, cohort_id) => {
+        console.log(`Dropped ${files[0].name} for ${student_id}`);
+        dispatch(cpcActions.postStudentImageThunk(files[0], image_type, student_id, cohort_id));
+    },
+});
 
 class FileDropzone extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { files: [] };
-  }
-
-  onDrop(files) {
-    this.setState({
-      files,
-    });
   }
 
   render() {
+    console.log('image on render', this.props);
+
     return (
       <section>
-        <div className="dropzone">
-          <Dropzone onDrop={this.onDrop.bind(this)} multiple={false}>
-            <p>{this.props.label}</p>
+        <div>
+          <Dropzone className="dropzone" accept="image/*" multiple={false} disablePreview={false}
+                    onDrop={(files) => this.props.onDrop(files, this.props.name,
+                        this.props.currentStudent, this.props.currentCohort)}>
+              {this.props.image !== null ?
+                  <div> {this.props.overlay ? <div className={this.props.overlay}></div> : null}
+                    <div><img className="dropzonePreview" src={this.props.image} /></div>
+                  </div> :
+                  <div><span className="dropzonePlus">+</span><p>{this.props.label}</p>
+                    <p>Drag and drop file or click to browse</p>
+                  </div>
+              }
           </Dropzone>
         </div>
-        <aside>
-          <h2>Dropped files</h2>
-          <ul>
-            {
-              this.state.files.map(f => <li>{f.name} - {f.size} bytes</li>)
-            }
-          </ul>
-        </aside>
       </section>
     );
   }
 }
 
-export default FileDropzone;
+export default connect(mapStateToProps, mapDispatchToProps)(FileDropzone);

@@ -210,7 +210,7 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
     .then(function (responseData) {
       // flatten the data out by creating an array of program ids
       // and a corresponding array of objects, indexed by the cohort ids
-      //console.log('fetch COHORT: responseData', responseData);
+      console.log('fetch COHORT: responseData', responseData);
       const cohorts = responseData.map(cohort => cohort.cohort_id);
       const cohortsById = responseData.reduce((acc, curr, i) => {
         acc[cohorts[i]] = curr;
@@ -220,20 +220,24 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
       const cohortList = { cohorts, cohortsById };
       dispatch(setCohortList(cohortList, mode));
 
-      switch (mode) {
-        case 'dropdown':
-          if (operation === 'edit')
-            dispatch(updateCurrentStudent('cohort_id', cohorts[0]));
-          else if (operation === 'add')
-            dispatch(updateNewStudent('cohort_id', cohorts[0]));
-          else
-            console.error(`invalid operation in fetchCohortListThunk: ${operation}`)
-          break;
-        case 'fetchAll':
-          dispatch(setCurrentCohortFetchStudents(cohorts[0], mode));
-          break;
-        default:
-          console.error(`cpcContainerActions fetchCohortListThunk invalid mode ${mode}`);
+      const cohort_id = (cohorts && cohorts[0]) ? cohorts[0] : null;
+
+      if(cohort_id) {
+        switch (mode) {
+          case 'dropdown':
+            if (operation === 'edit')
+              dispatch(updateCurrentStudent('cohort_id', cohorts[0]));
+            else if (operation === 'add')
+              dispatch(updateNewStudent('cohort_id', cohorts[0]));
+            else
+              console.error(`invalid operation in fetchCohortListThunk: ${operation}`)
+            break;
+          case 'fetchAll':
+            dispatch(setCurrentCohortFetchStudents(cohorts[0], mode));
+            break;
+          default:
+            console.error(`cpcContainerActions fetchCohortListThunk invalid mode ${mode}`);
+        }
       }
     })
     .catch(err => dispatch(fetchError(err, 'fetchCohortListThunk')));
@@ -324,3 +328,30 @@ export const postNewStudentThunk = (student) => dispatch => {
     })
     .catch(err => dispatch(fetchError(err, 'postNewStudentThunk')));
 };
+
+export const postStudentImageThunk = (image, image_type, student_id, cohort_id) => dispatch => {
+    console.log(`in postStudentImageThunk - studentId: ${student_id} type: ${image_type} file:${image.name}`);
+
+    // pass image data up as a formData object
+    const data = new FormData();
+    data.append('image', image);
+    data.append('name', image.name);
+    data.append('student_id', student_id);
+    data.append('image_type', image_type);
+    data.append('cohort_id', cohort_id);
+                                                                                                                              // fetch the Cohort list from csdb and dispatch accordingly
+    fetch('http://localhost:8080/imageUpload',
+        {
+            method: 'post',
+            body: data,
+        })
+        .then(status)
+        .then(json)
+        .then(function (responseData) {
+            // update state
+            console.log('post Student Image: responseData', responseData);
+            dispatch(updateCurrentStudent(image_type, image.name));
+
+        })
+        .catch(err => dispatch(fetchError(err, 'postStudentImageThunk')));
+}

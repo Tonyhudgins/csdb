@@ -34,22 +34,18 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(cpcActions.fetchCampusListThunk('dropdown', operation));
   },
 
-  initValue: (field, value) => {
-    dispatch(cpcActions.updateNewStudent(field, value));
-  },
-
   handleCampusChange: (operation, event) => {
-    console.log(`AddStudentTab handleCampusChange - campusId: ${event.target.value} op:${operation}`);
+    console.log(`StudentForm handleCampusChange - campusId: ${event.target.value} op:${operation}`);
     dispatch(cpcActions.fetchProgramListThunk(event.target.value, 'dropdown', operation));
   },
 
   handleProgramChange: (operation, event) => {
-    console.log(`AddStudentTab handleProgramChange - programId: ${event.target.value}`);
+    console.log(`StudentForm handleProgramChange - programId: ${event.target.value}`);
     dispatch(cpcActions.fetchCohortListThunk(event.target.value, 'dropdown', operation));
   },
 
   handleChange: (operation, event) => {
-    console.log(`AddStudentTab in handleChange ${event.target.name} = ${event.target.value}`);
+    console.log(`StudentForm in handleChange ${event.target.name} = ${event.target.value}`);
     if (operation === 'edit')
       dispatch(cpcActions.updateCurrentStudent(event.target.name, event.target.value));
     else
@@ -92,7 +88,7 @@ class StudentForm extends Component {
   render() {
     const student = this.props.student;
 
-    console.log('StudentForm in render');
+    console.log('StudentForm in render', student);
 
     let campusOptions = [];
     if (this.props.simpleCampusesList && this.props.simpleCampusesList.length) {
@@ -177,7 +173,7 @@ class StudentForm extends Component {
             <div className="col-md-3">
               <select id="dropdownCohortSelect" name="cohort_id"
                       className="form-control"
-                      onChange={(event) => (event) => this.props.handleChange(this.props.operation, event)(this.props.operation, event)}
+                      onChange={(event) => this.props.handleChange(this.props.operation, event)}
                       value={student.cohort_id}>
                 {cohortOptions}
               </select>
@@ -282,22 +278,18 @@ class StudentForm extends Component {
           <div className="form-group">
             <div className="col-md-6">
               <div className="input-group">
-                <FileDropzone id="bioImg" name="bio_img" label="Drop Bio Image Here" />
-                {/*<label htmlFor="bioImg">Bio Image</label>
-                <input type="file" id="bioImg" name="bio_img" className="inputFile"
-                       value={student.bio_img} accept="image/*"
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)} />*/}
-                {/*<input id="bioImg" name="bio_img" className="form-control"
-                       placeholder="" type="text" value={student.bio_img}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>*/}
+                <FileDropzone id="bioImg" name="bio_img" overlay="picUploadOverlay bioPicUploadOverlay"
+                              image={student.bio_img ?
+                                  'client/assets/images/' + student.cohort_id + '/' + student.bio_img : null }
+                              label="Bio Image" />
               </div>
             </div>
             <div className="col-md-6">
               <div className="input-group">
-                <span className="input-group-addon">Codesmith Image</span>
-                <input id="codesmithImage" name="codesmith_img" className="form-control"
-                       placeholder="" type="text" value={student.codesmith_img}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <FileDropzone id="codesmithImg" name="codesmith_img" overlay="picUploadOverlay csPicUploadOverlay"
+                              image={student.codesmith_img ?
+                                  'client/assets/images/' + student.cohort_id + '/' + student.codesmith_img : null }
+                              label="Codesmith Image" />
               </div>
             </div>
           </div>

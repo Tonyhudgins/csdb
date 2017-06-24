@@ -90,13 +90,18 @@ const cpcReducer = function (state = initialState, action) {
     case types.SET_CURRENT_STUDENT:
       return Object.assign({}, state, { currentStudent: action.payload });
     case types.SET_STUDENT_DATA:
-      return update(state, {
-        studentsById: {
-          [state.currentStudent]: {
-            [action.field]: { $set: action.payload },
+      if(state.currentStudent) {
+        return update(state, {
+          studentsById: {
+            [state.currentStudent]: {
+              [action.field]: { $set: action.payload },
+            },
           },
-        },
-      });
+        });
+      } else {
+        console.log(`Will not attempt to update non-existing student ${state.currentStudent}`);
+        return state;
+      }
     case types.SET_NEW_STUDENT_DATA:
       return update(state, {
         newStudent: {
