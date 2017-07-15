@@ -31,7 +31,7 @@ const ProgramSelect = (props) => {
   //console.log('ProgramSelect: rendering ProgramSelect', props.programs.length, programOptions);
   return (
     <div className="cs-selection">
-      <select id="fetchAllProgramSelect" className="cs-select"
+      <select id="fetchAllProgramSelect" className="cs-select" value={props.currentProgram}
               onChange={props.handleProgramChange}>
         {programOptions}
       </select>

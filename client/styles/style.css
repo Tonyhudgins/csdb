@@ -58,8 +58,8 @@ a {
     color: #393939;
     box-shadow: 10px 0px 39px rgba(0, 0, 0, .2);
     float: left;
-    height: 300%;
-    width: 25%;
+    height: 3000px;
+    width: 20%;
 }
 
 #menuPanel input {
@@ -131,9 +131,9 @@ a {
     float: left;
     width: 75%;
     height: 100%;
-    background-image: url('../assets/images/codesmith-logo-3.png');
-    background-repeat: no-repeat;
-    background-position: center;
+    /*background-image: url('../assets/images/codesmith-logo-3.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: center;*/
 }
 
 .name {
@@ -207,20 +207,17 @@ a {
 }
 
 .info {
-    position: absolute;
-    bottom: 67px;
-    left: 67px;
+    margin: 10px;
 }
 
 .logo {
-    position: absolute;
-    left: 0px;
+    float:left;
+    margin: 10px;
 }
 
 .cohort {
-    position: absolute;
-    text-align: right;
-    right: -630px;
+    float: right;
+    margin: 10px;
 }
 
 .blue {
@@ -290,7 +287,7 @@ a {
     cursor: pointer;
     display: inline-block;
     position: relative;
-    left: 0px;
+    left: 35px;
     top: -4px;
 }
 
@@ -314,9 +311,7 @@ a {
     box-shadow: 8px -2px 40px 10px rgba(0,0,0,.2);
     width: 97%;
     margin: 0 auto;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
+    border-radius: 5px;
     letter-spacing: .1em;
 }
 
@@ -376,23 +371,59 @@ a {
 .csPicUploadOverlay {
     background-image: url(../assets/images/csPicUploadOverlay.png);
 }
-/*
-#campusName {
-    width: 900px;
+
+#studentSelect {
+    margin-top: 75px;
 }
 
-#address1, #address2 {
-    width: 750px;
+.tg  {
+    border-collapse:collapse;
+    border-spacing:0;
+    border-color:#ccc;
+    text-align: left;
+}
+.tg td{
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    padding: 0 5px;
+    border-style:solid;
+    border-width:1px;
+    overflow:hidden;
+    word-break:normal;
+    border-color:#ccc;
+    color:#333;
+    background-color:#fff;
+}
+.tg th{
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    font-weight:normal;
+    padding:10px 5px;
+    border-style:solid;
+    border-width:1px;
+    overflow:hidden;
+    word-break:normal;
+    border-color:#ccc;
+    color:#333;
+    background-color:#f0f0f0;
 }
 
-#city {
-
+#cohortFileUpload {
+    height: 550px;
+    width: 80%;
+    margin: 10px auto;
+    text-align: center;
+    color: #bbbaba;
 }
 
-#state {
-
+#cohortFileDropzone {
+    float: left;
+    margin: 10px 40px;
 }
 
-#zipCode {
-    width: 150px;
-}*/
+#cohortFileSpec {
+    float: left;
+    width: 50%;
+    margin-top: 10px;
+}
+

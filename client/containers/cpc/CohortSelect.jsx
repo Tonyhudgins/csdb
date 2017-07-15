@@ -30,7 +30,7 @@ const CohortSelect = (props) => {
   //console.log('CohortSelect: rendering CohortSelect', props.cohorts.length, cohortOptions);
   return (
     <div className="cs-selection">
-      <select id="fetchAllCohortSelect" className="cs-select"
+      <select id="fetchAllCohortSelect" className="cs-select" value={props.currentCohort}
               onChange={props.handleCohortChange}>
         {cohortOptions}
       </select>

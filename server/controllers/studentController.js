@@ -23,6 +23,15 @@ const buildSQL = (query, where, ...values) => {
     queryString: query,
     values: [...values],
   };
+  const operators = {
+    eq: ' = ',
+    ne: ' <> ',
+    gt: ' > ',
+    gte: ' >= ',
+    lt:  ' < ',
+    lte: ' <= ',
+    like: ' LIKE ',
+  };
 
   console.log('in BuildSQL');
   console.log(result);
@@ -31,22 +40,35 @@ const buildSQL = (query, where, ...values) => {
   if (where && typeof where === 'object') {
     result.queryString += where ? ' where' : '';
 
-    Object.keys(where).forEach(function (criteria, i) {
-      result.queryString += ` ${criteria} = $${result.values.length + 1} and`;
-      result.values.push(where[criteria]);
+    Object.keys(where).forEach(function(operator) {
+      console.log('operator', operator);
+      Object.keys(where[operator]).forEach(function (criteria, i) {
+        const value = where[operator][criteria];
+        console.log('criteria', criteria);
+        console.log('value', value);
+        result.queryString += ` ${criteria} ${operators[operator]} $${result.values.length + 1} and`;
+        result.values.push(value);
+      });
     });
 
     result.queryString = result.queryString.replace(/and$/, '');
   }
 
+  console.log('SCHNO >> ', result);
+
   return result;
 };
 
 const buildUpdate = (query, data, where) => {
+  console.log('in buildUpdate');
   const result = {
     queryString: query,
     values: [],
   };
+
+  console.log('query', query);
+  console.log('data', data);
+  console.log('where', where);
 
   if (data && typeof data === 'object') {
     Object.keys(data).forEach(function (field, i) {
@@ -200,25 +222,25 @@ studentController.createStudent = (req, res, next) =>  {
 };
 
 studentController.updateStudent = (req, res, next) => {
-  console.log('in updateStudent');
-  console.log(req.body);
-  console.log(req.body.where);
-  const sql = buildUpdate('UPDATE student set', req.body.data, req.body.where);
+    console.log('in updateStudent');
+    console.log(req.body);
+    console.log(req.body.where);
+    const sql = buildUpdate('UPDATE student set', req.body.data, req.body.where, req.body.whereNe);
 
-  console.log(sql);
+    console.log(sql);
 
-  csdb.query(
-    sql.queryString,
-    [...sql.values],
-    function (err, result) {
-      if (err) {
-        console.log('failed', err);
-        return res.status(400).send(err);
-      } else {
-        console.log('update success', result);
-        next();
-      }
-    });
+    csdb.query(
+        sql.queryString,
+        [...sql.values],
+        function (err, result) {
+            if (err) {
+                console.log('failed', err);
+                return res.status(400).send(err);
+            } else {
+                console.log('update success', result);
+                next();
+            }
+        });
 };
 
 studentController.updateImage = (req, res, next) => {
@@ -231,7 +253,7 @@ studentController.updateImage = (req, res, next) => {
       // update the database
       const sql = buildUpdate('UPDATE student set',
           {[fields.image_type]: fields.name},
-          {'student_id': fields.student_id});
+          { eq: {'student_id': fields.student_id}});
 
       csdb.query(
         sql.queryString,
@@ -242,8 +264,12 @@ studentController.updateImage = (req, res, next) => {
             return res.status(400).send(err);
           } else {
             const source = files.image.path;
-            const dest = path.join(__dirname, '../../client/assets/images/' + fields.cohort_id + '/' + fields.name);
+            // create the cohort directory if it doesn't already exist
+            const targetDir = path.join(__dirname, '../../client/assets/images/' + fields.cohort_id);
+            if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
+            const dest = path.join( targetDir + '/' + fields.name);
             console.log('fields', fields);
+            console.log('dest', dest);
             fs.rename(source, dest, (err) => {
                 if (err) throw err;
                 console.log(`successfully moved ${source} to ${dest}`);
@@ -255,6 +281,31 @@ studentController.updateImage = (req, res, next) => {
 
       }
     });
+};
+
+studentController.bulkStudentsUpload = (req, res, next) => {
+  console.log('in bulkStudentsUpload');
+  console.log(req.body);
+
+  if(req.body.cohort_id && req.body.data.length) {
+    req.body.data.forEach((student => {
+      student.cohort_id = req.body.cohort_id;
+      const sql = buildInsert('INSERT INTO student', student);
+      console.log(sql);
+      csdb.query(
+        sql.queryString,
+        [...sql.values],
+        function (err, result) {
+          if (err) {
+            console.log('failed', err);
+            return res.status(400).send({ error: err });
+          }
+        });
+      next();
+    }));
+  } else {
+    return res.status(400).send({ error: 'No cohort_id provided' });
+  }
 };
 
 module.exports = studentController;

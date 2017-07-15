@@ -6,6 +6,25 @@ const studentController = require('./controllers/studentController');
 
 const app = express();
 
+/* eslint-disable global-require */
+if (process.env.NODE_ENV === 'development') {
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+
+  const webpackConfig = require('../webpack/dev.config.js');
+  const compiler = webpack(webpackConfig);
+
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+    noInfo: true
+  }));
+
+  app.use(webpackHotMiddleware(compiler));
+}
+/* eslint-enable */
+
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -65,6 +84,13 @@ app.post('/imageUpload',
     (req, res) => {
     res.status(200).send({"message": "Image updated"});
     }
+);
+
+app.post('/bulkStudentsUpload',
+  studentController.bulkStudentsUpload,
+  (req, res) => {
+    res.status(200).send({"message": "Bulk Update Complete"});
+  }
 );
 
 app.get('*', (req, res) => res.redirect('http://localhost:8080/'));

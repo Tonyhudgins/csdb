@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import changeSelectedTab from '../../actions/creators/tabActions';
 import CampusTab from './CampusTab.jsx';
 import AddEditStudentTabs from './AddEditStudentTabs.jsx';
+import AddEditCohortTabs from './AddEditCohortTabs.jsx';
 
 const mapStateToProps = store => ({
   tabs1: store.addEditState.tabs1,
@@ -15,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const addEditContainer = (props) => (
-  <div id="addEditContainer" className="container">
+  <div id="addEditContainer">
     <Tabs
         name="tabs1"
         className="tabs tabs-1"
@@ -36,10 +37,7 @@ const addEditContainer = (props) => (
           <AddEditStudentTabs/>
         </TabContent>
         <TabContent for="tabCohort">
-          <h1>Cohort</h1>
-          <label htmlFor="cohortFile">Upload CSV</label>
-          <input type="file" id="cohortFile" name="cohortFile"
-                 accept=".csv" onChange={props.uploadCohortFile} />
+
         </TabContent>
         <TabContent for="tabProgram">
           <h1>Program</h1>

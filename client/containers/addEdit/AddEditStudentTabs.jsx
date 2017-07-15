@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import changeSelectedTab from '../../actions/creators/tabActions';
 import AddStudentTab from './AddStudentTab.jsx';
 import EditStudentTab from './EditStudentTab.jsx';
+import BulkAddStudentsTab from './BulkAddStudentsTab.jsx';
 
 const mapStateToProps = store => ({
   addEditStudentTabs: store.addEditState.addEditStudentTabs,
@@ -36,7 +37,7 @@ const addEditStudentTabs = (props) => (
           <AddStudentTab/>
         </TabContent>
         <TabContent for="tabBulkAddStudents">
-          <h1>Bulk Add Students here</h1>
+         <BulkAddStudentsTab/>
         </TabContent>
       </div>
     </Tabs>

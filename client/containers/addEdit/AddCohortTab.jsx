@@ -122,7 +122,7 @@ class CohortTab extends Component {
             </div>
             <div className="col-md-6">
               <div className="input-group">
-                <span className="input-group-addon">Begin Date</span>
+                <span className="input-group-addon">End Date</span>
                 <input id="endDate" name="end_date" className="form-control"
                        placeholder="123 Tech Ave" type="text" value={cohort.end_date}
                        onChange={this.props.handleChange}/>

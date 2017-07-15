@@ -1,11 +1,22 @@
+/**
+ * ************************************
+ *
+ * @module  StudentForm
+ * @author  smozingo
+ * @date    28.May.2017
+ * @description Provides the Student form for both adding and editing students.
+ * The add/edit behavior hinges on the 'operation' prop
+ *
+ * ************************************
+ */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import USStates from '../../components/OptionsUSStates.jsx';
 import Option from '../../components/Option.jsx';
-import FileDropzone from '../../components/FileDropzone.jsx';
+import ImageDropzone from '../../components/ImageDropzone.jsx';
 import StudentSelect from '../cpc/StudentSelect.jsx';
+import DeleteStudentModal from './DeleteStudentModal.jsx';
 import * as cpcActions from '../../actions/creators/cpcContainerActions';
-
 
 const mapStateToProps = store => ({
   newStudent:       store.cpcState.newStudent,
@@ -61,35 +72,48 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       dispatch(cpcActions.postNewStudentThunk(student));
   },
 
+  resetForm: () => {
+    // set all inputs to empty strings
+    const inputs = document.querySelectorAll('#studentForm input');
+    inputs.forEach((input) => input.value = '');
+  }
+
 });
 
 class StudentForm extends Component {
   constructor(props) {
     super(props);
+    // component level state
+    this.state = { modal: false };
   }
 
-  componentWillUpdate() {
-    console.log('StudentForm in CWU');
+  createModal(event, student) {
+    event.preventDefault();
+    this.setState({ modal: true });
+  }
 
-    // There has to be a more elegant way to clear the form...
-    let studentForm = document.getElementById('studentForm');
-    const allFields = studentForm.querySelectorAll('input');
-    for (let node in allFields) {
-      if (allFields.hasOwnProperty(node) && typeof allFields[node] === 'object')
-        allFields[node].value = '';
-    }
+  resetModal(event) {
+    this.setState({ modal: false });
   }
 
   componentWillMount() {
-    console.log('StudentForm in CWM currentProgram:', this.props.currentProgram);
+    console.log('StudentForm in CWM operation:', this.props.operation);
     this.props.init(this.props.operation);
+  }
+
+  componentDidMount() {
+    if(this.props.operation === 'edit')
+      document.getElementById('btnStudentUpdateSubmit').classList.add('pull-right');
   }
 
   render() {
     const student = this.props.student;
 
-    console.log('StudentForm in render', student);
+    console.log(`StudentForm (${this.props.operation}) in render`, student);
+    // if the student object is empty, reset the form
+    if(Object.keys(student).length === 0 && student.constructor === Object) this.props.resetForm();
 
+    // init and populate the campus, program, and cohort dropdowns
     let campusOptions = [];
     if (this.props.simpleCampusesList && this.props.simpleCampusesList.length) {
       campusOptions = this.props.simpleCampusesList.map((campusId, i) => (
@@ -114,12 +138,41 @@ class StudentForm extends Component {
       ));
     }
 
-    let studentSelect;
+    // prepare the Edit Student sections
+    let studentSelect, btnStudentDelete;
     if (this.props.operation === 'edit') {
-      studentSelect = <StudentSelect/>;
+      studentSelect =
+        <div className="form-group">
+          <div className="col-md-4">
+            <div className="input-group pull-right">
+              <ImageDropzone id="bioImg" name="bio_img" overlay="picUploadOverlay bioPicUploadOverlay"
+                            image={student.bio_img ?
+                                'client/assets/images/' + student.cohort_id + '/' + student.bio_img : null }
+                            label="Bio Image"/>
+            </div>
+          </div>
+          <StudentSelect resetModal={this.resetModal.bind(this)}/>
+          <div className="col-md-4">
+            <div className="input-group">
+              <ImageDropzone id="codesmithImg" name="codesmith_img" overlay="picUploadOverlay csPicUploadOverlay"
+                            image={student.codesmith_img ?
+                                'client/assets/images/' + student.cohort_id + '/' + student.codesmith_img : null }
+                            label="Codesmith Image"/>
+            </div>
+          </div>
+        </div>
+
+        btnStudentDelete =
+          <div className="col-md-6">
+            <button className="btn btn-danger"
+               onClick={(event) => this.createModal(event, student)}>
+            Delete
+            </button>
+          </div>
     }
 
     return (
+    <main>
       <form id="studentForm" className="form-horizontal">
         <fieldset>
           <legend>{this.props.legend}</legend>
@@ -277,32 +330,18 @@ class StudentForm extends Component {
           </div>
           <div className="form-group">
             <div className="col-md-6">
-              <div className="input-group">
-                <FileDropzone id="bioImg" name="bio_img" overlay="picUploadOverlay bioPicUploadOverlay"
-                              image={student.bio_img ?
-                                  'client/assets/images/' + student.cohort_id + '/' + student.bio_img : null }
-                              label="Bio Image" />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="input-group">
-                <FileDropzone id="codesmithImg" name="codesmith_img" overlay="picUploadOverlay csPicUploadOverlay"
-                              image={student.codesmith_img ?
-                                  'client/assets/images/' + student.cohort_id + '/' + student.codesmith_img : null }
-                              label="Codesmith Image" />
-              </div>
-            </div>
-          </div>
-          <div className="form-group">
-            <div className="col-md-6">
-              <button className="btn btn-primary"
+              <button id="btnStudentUpdateSubmit" className="btn btn-primary"
                       onClick={(event) => this.props.handleSubmit(student, this.props.operation, event)}>
                 Submit
               </button>
             </div>
+              {btnStudentDelete}
           </div>
         </fieldset>
       </form>
+        {/* create the modal if appropriate*/}
+        {this.state.modal ? <DeleteStudentModal student={student} resetModal={this.resetModal.bind(this)}/> : <div></div>}
+    </main>
     );
   }
 }

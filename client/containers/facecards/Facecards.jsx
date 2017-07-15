@@ -4,6 +4,7 @@ import StudentFlashcard from './StudentFlashcard.jsx';
 import CpcContainer from '../cpc/CpcContainer.jsx';
 import Carousel from 'nuka-carousel';
 import fetchStudentFacecardsThunk from '../../actions/creators/facecardsActions';
+import * as cpcActions from '../../actions/creators/cpcContainerActions';
 
 const mapStateToProps    = store    => ({
   students: store.cpcState.students,
@@ -14,6 +15,10 @@ const mapStateToProps    = store    => ({
 
 const mapDispatchToProps = dispatch => ({
   getStudentFacecards: cohortId => { cohortId ? dispatch(fetchStudentFacecardsThunk(cohortId)) : null; },
+
+  init: () => {
+    dispatch(cpcActions.fetchCampusListThunk('dropdown', 'noop'));
+  },
 });
 
 const showName = event => {
@@ -26,53 +31,63 @@ const showName = event => {
   last.classList.remove('hidden');
 };
 
-const Facecards = (props) => {
+class Facecards extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  const cohort = (props.currentCohort && props.cohortsById[props.currentCohort]) ?
-    props.cohortsById[props.currentCohort] : {};
+  componentWillMount() {
+    console.log('Facecards in CWM');
+    this.props.init(this.props.operation);
+  }
 
-  //const students = (props.currentStudent && props.studentsById) ? props.studentsById : {};
+  render() {
+    const cohort = (this.props.currentCohort && this.props.cohortsById[this.props.currentCohort]) ?
+      this.props.cohortsById[this.props.currentCohort] : {};
 
-  return (
-    <div>
-      <CpcContainer />
-      <div className="clear"></div>
-      <div id="playFacecards"
-           onClick={() => props.getStudentFacecards(props.currentCohort)}>
-        Play
-      </div>
-      <section id="facecards" className="container">
-        <div className="row person">
-          <Carousel>
-            {
-              props.students.map((student, i) => (
-                <StudentFlashcard
-                  key={i}
-                  id={i}
-                  currentCohort={props.currentCohort}
-                  showName={showName}
-                  firstName={props.studentsById[student].first_name}
-                  lastName={props.studentsById[student].last_name}
-                  img={'./client/assets/images/' + props.currentCohort + '/' + props.studentsById[student].bio_img}
-                />))
-            }
-          </Carousel>
-        </div>
+    let studentCards = [];
+    if (this.props.students && this.props.students.length) {
+      // randomize the students and build our flashcard array
+      studentCards = this.props.students.sort((a,b) => .5 - Math.random()).map((student, i) => (
+        <StudentFlashcard
+          key={i}
+          id={i}
+          currentCohort={this.props.currentCohort}
+          showName={showName}
+          firstName={this.props.studentsById[student].first_name}
+          lastName={this.props.studentsById[student].last_name}
+          img={'./client/assets/images/' + this.props.currentCohort + '/' + this.props.studentsById[student].bio_img}
+        />
+      ));
+    }
 
-        <div className="row">
-          <div className="info">
-            <div className="logo">CODESMITH<span className="blue">FACECARDS</span></div>
-            {
-              props.currentCohort ?
-              <div className="cohort">COHORT
-                <span className="blue">{cohort.cohort_name}</span>
-              </div> :
-              <div className="cohort"></div>
-            }
+    return (
+      <div>
+        <CpcContainer />
+        <div className="clear"></div>
+        <section id="facecards" className="container">
+          <div className="row person">
+            <Carousel wrapAround={true}>
+              {studentCards}
+            </Carousel>
           </div>
-        </div>
-      </section>
-    </div>
-  )};
+
+          <div className="row">
+            <div className="info">
+              <div className="logo">CODESMITH<span className="blue">FACECARDS</span></div>
+              {
+                this.props.currentCohort ?
+                <div className="cohort">COHORT
+                  <span className="blue">{cohort.cohort_name}</span>
+                </div> :
+                <div className="cohort"></div>
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Facecards);

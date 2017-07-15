@@ -11,7 +11,7 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = dispatch => ({
 
-  handleStudentChange: (event) => {
+  handleStudentChange: (event, handleModal) => {
     // There has to be a more elegant way to clear the form...
     let studentForm = document.getElementById('studentForm');
     const allFields = studentForm.querySelectorAll('input');
@@ -21,6 +21,7 @@ const mapDispatchToProps = dispatch => ({
     }
 
     console.log(`EditStudentTab handleStudentChange - studentId: ${event.target.value}`);
+    handleModal();
     dispatch(cpcActions.setCurrentStudent(event.target.value));
   },
 });
@@ -38,11 +39,10 @@ const StudentSelect = (props) => {
 
   //console.log('StudentSelect: rendering StudentSelect', props.cohorts.length, cohortOptions);
   return (
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="studentSelect">Select Student</label>
+    <div>
       <div className="col-md-4">
         <select id="studentSelect" name="student_select" className="form-control"
-                onChange={props.handleStudentChange}>
+                onChange={(event) => props.handleStudentChange(event, props.resetModal)}>
           {studentOptions}
         </select>
       </div>

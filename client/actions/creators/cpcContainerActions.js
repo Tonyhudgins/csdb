@@ -10,6 +10,7 @@
  */
 
 import * as types from '../actionTypes';
+import * as constants from '../../constants';
 
 /*
  ACTIONS - These get dispatched to the appropriate reducers to update state
@@ -55,7 +56,9 @@ export const setCurrentCohort = cohortId => ({
 export const setCurrentStudent = studentId => {
 
   // update the select dropdown first!
-  document.getElementById('studentSelect').value = studentId;
+  const studentSelect = document.getElementById('studentSelect');
+  if (studentSelect) studentSelect.value = studentId;
+
   return ({
     type: types.SET_CURRENT_STUDENT,
     payload: Number(studentId),
@@ -101,7 +104,8 @@ export const setCurrentProgramFetchCohorts = (programId, mode, operation) => dis
   // make sure that the selected item represents the current program
   const element = `${mode}ProgramSelect`;
   console.log(`updating ${element} to ${programId}`);
-  document.getElementById(`${mode}ProgramSelect`).value = programId;
+  const programSelect = document.getElementById(`${mode}ProgramSelect`);
+  if (programSelect) programSelect.value = programId;
 };
 
 export const setCurrentCohortFetchStudents = (cohortId, mode) => dispatch => {
@@ -113,7 +117,8 @@ export const setCurrentCohortFetchStudents = (cohortId, mode) => dispatch => {
   // make sure that the selected item represents the current cohort
   const element = `${mode}CohortSelect`;
   console.log(`updating ${element} to ${cohortId}`);
-  document.getElementById(`${mode}CohortSelect`).value = cohortId;
+  const cohortSelect = document.getElementById(`${mode}CohortSelect`);
+  if (cohortSelect) cohortSelect.value = cohortId;
 };
 
 /*
@@ -172,7 +177,7 @@ export const fetchProgramListThunk = (campusId, mode, operation) => dispatch => 
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ where: { campus_id: campusId } }),
+      body: JSON.stringify({ where: { eq: { campus_id: campusId }} }),
     })
     .then(status)
     .then(json)
@@ -203,7 +208,7 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ where: { program_id: programId } }),
+      body: JSON.stringify({ where: { eq: { program_id: programId }} }),
     })
     .then(status)
     .then(json)
@@ -229,6 +234,8 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
               dispatch(updateCurrentStudent('cohort_id', cohorts[0]));
             else if (operation === 'add')
               dispatch(updateNewStudent('cohort_id', cohorts[0]));
+            else if (operation === 'noop')
+              console.log('noop');
             else
               console.error(`invalid operation in fetchCohortListThunk: ${operation}`)
             break;
@@ -257,7 +264,7 @@ export const fetchStudentListThunk = (cohortId, studentId) => dispatch => {
     {
       method: 'post',
       headers,
-      body: JSON.stringify({ where: criteria }),
+      body: JSON.stringify({ where: { eq: criteria, ne: { status: constants.INACTIVE }} }),
     })
     .then(status)
     .then(json)
@@ -267,6 +274,13 @@ export const fetchStudentListThunk = (cohortId, studentId) => dispatch => {
       console.log('fetch STUDENTS: responseData', responseData);
       students = responseData.map(student => student.student_id);
       studentsById = responseData.reduce((acc, curr, i) => {
+        // controlled form components don't like nulls, so store nulls as empty strings
+        console.log('curr',curr);
+        for( let key in curr ) {
+          console.log(key,'=>', curr[key]);
+          if(curr[key] === null) curr[key] = '';
+        }
+
         acc[students[i]] = curr;
         return acc;
       }, {});
@@ -294,7 +308,7 @@ export const postCurrentStudentThunk = (student) => dispatch => {
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ data: student, where: { student_id: student.student_id } }),
+      body: JSON.stringify({ data: student, where: { eq: { student_id: student.student_id }} }),
     })
     .then(status)
     .then(json)
@@ -311,7 +325,6 @@ export const postNewStudentThunk = (student) => dispatch => {
   console.log(`in postNewStudentThunk - studentId: ${student.student_id}`);
   const criteria = {};
 
-  // fetch the Cohort list from csdb and dispatch accordingly
   fetch('http://localhost:8080/createStudent',
     {
       method: 'post',
@@ -329,17 +342,39 @@ export const postNewStudentThunk = (student) => dispatch => {
     .catch(err => dispatch(fetchError(err, 'postNewStudentThunk')));
 };
 
+export const deleteCurrentStudentThunk = (status, student_id, cohort_id) => dispatch => {
+    console.log(`in deleteStudentThunk - studentId:${student_id}`);
+    fetch('http://localhost:8080/updateStudent',
+        {
+            method: 'post',
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({ data: {status}, where: { eq: { student_id: student_id }} }),
+        })
+        .then(status)
+        .then(json)
+        .then(function (responseData) {
+            // flatten the data out by creating an array of program ids
+            // and a corresponding array of objects, indexed by the cohort ids
+            console.log('delete STUDENT: responseData', responseData);
+            dispatch(fetchStudentListThunk(cohort_id));
+
+        })
+        .catch(err => dispatch(fetchError(err, 'deleteStudentThunk')));
+
+}
+
 export const postStudentImageThunk = (image, image_type, student_id, cohort_id) => dispatch => {
     console.log(`in postStudentImageThunk - studentId: ${student_id} type: ${image_type} file:${image.name}`);
 
     // pass image data up as a formData object
+    // we'll use this to upload the image and update the student in the database
     const data = new FormData();
     data.append('image', image);
     data.append('name', image.name);
     data.append('student_id', student_id);
     data.append('image_type', image_type);
     data.append('cohort_id', cohort_id);
-                                                                                                                              // fetch the Cohort list from csdb and dispatch accordingly
+
     fetch('http://localhost:8080/imageUpload',
         {
             method: 'post',
@@ -355,3 +390,26 @@ export const postStudentImageThunk = (image, image_type, student_id, cohort_id) 
         })
         .catch(err => dispatch(fetchError(err, 'postStudentImageThunk')));
 }
+
+export const postBulkStudentsThunk = (data, cohort_id) => dispatch => {
+  console.log(`in postBulkStudentsThunk - cohortId: ${cohort_id} count:${data.length}`);
+
+  fetch('http://localhost:8080/bulkStudentsUpload',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({data: data, cohort_id: cohort_id }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      // update state
+      console.log('post Bulk Student Data: responseData', responseData);
+
+      const cohortFileDropzone = document.getElementById(`cohortFileDropzone`);
+      if(cohortFileDropzone) cohortFileDropzone.innerHtml = responseData;
+
+    })
+    .catch(err => dispatch(fetchError(err, 'postBulkStudentsThunk')));
+}
+
