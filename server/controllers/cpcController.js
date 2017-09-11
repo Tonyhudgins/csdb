@@ -3,7 +3,7 @@ const formidable = require('formidable');
 const fs = require('fs');
 const path = require('path');
 
-const studentController = {};
+const cpcController = {};
 
 /**
  * buildSQL
@@ -42,7 +42,7 @@ const buildSQL = (query, where, ...values) => {
 
     Object.keys(where).forEach(function(operator) {
       console.log('operator', operator);
-      Object.keys(where[operator]).forEach(function (criteria, i) {
+      Object.keys(where[operator]).forEach(function (criteria) {
         const value = where[operator][criteria];
         console.log('criteria', criteria);
         console.log('value', value);
@@ -71,7 +71,7 @@ const buildUpdate = (query, data, where) => {
   console.log('where', where);
 
   if (data && typeof data === 'object') {
-    Object.keys(data).forEach(function (field, i) {
+    Object.keys(data).forEach(function (field) {
       if (data[field] !== null) {
         result.values.push(data[field]);
         result.queryString += ` ${field} = ($${result.values.length}),`;
@@ -94,7 +94,7 @@ const buildInsert = (query, data) => {
 
   if (data && typeof data === 'object') {
     result.queryString += '(';
-    Object.keys(data).forEach(function (field, i) {
+    Object.keys(data).forEach(function (field) {
       if (data[field] !== null) {
         result.queryString += ` ${field},`;
         result.values.push(data[field]);
@@ -114,7 +114,7 @@ const buildInsert = (query, data) => {
 
 };
 
-studentController.getBioImages = (req, res, next) =>  {
+cpcController.getBioImages = (req, res, next) =>  {
 
   const sql = buildSQL('SELECT student_id, first_name, last_name, bio_img FROM student', req.body.where);
 
@@ -123,6 +123,7 @@ studentController.getBioImages = (req, res, next) =>  {
     [...sql.values],
     function (err, result) {
       if (err) {
+        console.error(err);
         return res.status(400).send('Fetch failed for bio images');
       } else {
         res.studentData = result.rows;
@@ -131,7 +132,7 @@ studentController.getBioImages = (req, res, next) =>  {
     });
 };
 
-studentController.getCampuses = (req, res, next) => {
+cpcController.getCampuses = (req, res, next) => {
 
   const sql = buildSQL('SELECT * from campus', req.body.where);
 
@@ -140,6 +141,7 @@ studentController.getCampuses = (req, res, next) => {
     [...sql.values],
     function (err, result) {
       if (err) {
+        console.error(err);
         return res.status(400).send('Fetch failed for campus list');
       } else {
         res.campusList = result.rows;
@@ -148,7 +150,7 @@ studentController.getCampuses = (req, res, next) => {
     });
 };
 
-studentController.getPrograms = (req, res, next) => {
+cpcController.getPrograms = (req, res, next) => {
 
   const sql = buildSQL('SELECT * from program', req.body.where);
 
@@ -157,7 +159,8 @@ studentController.getPrograms = (req, res, next) => {
     [...sql.values],
     function (err, result) {
       if (err) {
-        return res.status(400).send('Fetch failed for program list');
+        console.error(err);
+        return res.status(400).send({error: err});
       } else {
         res.programList = result.rows;
         next();
@@ -165,16 +168,17 @@ studentController.getPrograms = (req, res, next) => {
     });
 };
 
-studentController.getCohorts = (req, res, next) => {
+cpcController.getCohorts = (req, res, next) => {
 
   const sql = buildSQL('SELECT * from cohort', req.body.where);
 
   csdb.query(
-    sql.queryString,
+    sql.queryString + ' order by cohort_name',
     [...sql.values],
     function (err, result) {
       if (err) {
-        return res.status(400).send('Fetch failed for cohort list');
+        console.error(err);
+        return res.status(400).send({error: err});
       } else {
         res.cohortList = result.rows;
         next();
@@ -182,29 +186,27 @@ studentController.getCohorts = (req, res, next) => {
     });
 };
 
-studentController.getStudents = (req, res, next) => {
-  let q = 'SELECT * from student';
-  let where = [];
-  let values = [];
+cpcController.getStudents = (req, res, next) => {
 
   const sql = buildSQL('SELECT * from student', req.body.where);
-  sql.queryString += ' order by student_id';
+  sql.queryString += ' order by first_name';
 
   csdb.query(
     sql.queryString,
     [...sql.values],
     function (err, result) {
       if (err) {
-        return res.status(400).send(err);
+        console.error(err);
+        return res.status(400).send({error: err});
       } else {
-        console.log(result.rows);
+        // console.log(result.rows);
         res.studentList = result.rows;
         next();
       }
     });
 };
 
-studentController.createStudent = (req, res, next) =>  {
+cpcController.createStudent = (req, res, next) =>  {
 
   const sql = buildInsert('INSERT INTO student', req.body.data);
   csdb.query(
@@ -212,7 +214,7 @@ studentController.createStudent = (req, res, next) =>  {
     [...sql.values],
     function (err, result) {
       if (err) {
-        console.log('failed', err);
+        console.error(err);
         return res.status(400).send(err);
       } else {
         console.log('insert success', result);
@@ -221,7 +223,7 @@ studentController.createStudent = (req, res, next) =>  {
     });
 };
 
-studentController.updateStudent = (req, res, next) => {
+cpcController.updateStudent = (req, res, next) => {
     console.log('in updateStudent');
     console.log(req.body);
     console.log(req.body.where);
@@ -230,25 +232,26 @@ studentController.updateStudent = (req, res, next) => {
     console.log(sql);
 
     csdb.query(
-        sql.queryString,
-        [...sql.values],
-        function (err, result) {
-            if (err) {
-                console.log('failed', err);
-                return res.status(400).send(err);
-            } else {
-                console.log('update success', result);
-                next();
-            }
-        });
+      sql.queryString,
+      [...sql.values],
+      function (err, result) {
+        if (err) {
+          console.error(err);
+          return res.status(400).send(err);
+        } else {
+          console.log('update success', result);
+          next();
+        }
+      });
 };
 
-studentController.updateImage = (req, res, next) => {
+cpcController.updateImage = (req, res, next) => {
   console.log('in updateImage');
   const form = new formidable.IncomingForm();
   form.parse(req, (err, fields, files) => {
     if(err) {
-      return res.status(500).send(err);
+      console.error(err);
+      return res.status(400).send(err);
     } else {
       // update the database
       const sql = buildUpdate('UPDATE student set',
@@ -260,7 +263,7 @@ studentController.updateImage = (req, res, next) => {
         [...sql.values],
         function (err, result) {
           if (err) {
-            console.log('failed', err);
+            console.error(err);
             return res.status(400).send(err);
           } else {
             const source = files.image.path;
@@ -271,19 +274,17 @@ studentController.updateImage = (req, res, next) => {
             console.log('fields', fields);
             console.log('dest', dest);
             fs.rename(source, dest, (err) => {
-                if (err) throw err;
-                console.log(`successfully moved ${source} to ${dest}`);
-                next();
+              if (err) throw err;
+              console.log(`successfully moved ${source} to ${dest}`);
+              next();
             });
           }
         });
-
-
       }
     });
 };
 
-studentController.bulkStudentsUpload = (req, res, next) => {
+cpcController.bulkStudentsUpload = (req, res, next) => {
   console.log('in bulkStudentsUpload');
   console.log(req.body);
 
@@ -297,7 +298,7 @@ studentController.bulkStudentsUpload = (req, res, next) => {
         [...sql.values],
         function (err, result) {
           if (err) {
-            console.log('failed', err);
+            console.error(err);
             return res.status(400).send({ error: err });
           }
         });
@@ -308,5 +309,122 @@ studentController.bulkStudentsUpload = (req, res, next) => {
   }
 };
 
-module.exports = studentController;
+cpcController.createCohort = (req, res, next) =>  {
+
+  const sql = buildInsert('INSERT INTO cohort', req.body.data);
+  csdb.query(
+    sql.queryString,
+    [...sql.values],
+    function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send({ error: err});
+      } else {
+        console.log('insert success', result);
+        next();
+      }
+    });
+};
+
+cpcController.updateCohort = (req, res, next) => {
+  console.log('in updateCohort');
+  console.log(req.body);
+  console.log(req.body.where);
+  const sql = buildUpdate('UPDATE cohort set', req.body.data, req.body.where);
+
+  console.log(sql);
+
+  csdb.query(
+    sql.queryString,
+    [...sql.values],
+    function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send(err);
+      } else {
+        console.log('update success', result);
+        next();
+      }
+    });
+};
+
+cpcController.createProgram = (req, res, next) =>  {
+
+  const sql = buildInsert('INSERT INTO program', req.body.data);
+  csdb.query(
+    sql.queryString,
+    [...sql.values],
+    function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send({ error: err});
+      } else {
+        console.log('insert success', result);
+        next();
+      }
+    });
+};
+
+cpcController.updateProgram = (req, res, next) => {
+  console.log('in updateProgram');
+  console.log(req.body);
+  console.log(req.body.where);
+  const sql = buildUpdate('UPDATE program set', req.body.data, req.body.where);
+
+  console.log(sql);
+
+  csdb.query(
+    sql.queryString,
+    [...sql.values],
+    function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send(err);
+      } else {
+        console.log('update success', result);
+        next();
+      }
+    });
+};
+
+cpcController.createCampus = (req, res, next) =>  {
+
+  const sql = buildInsert('INSERT INTO campus', req.body.data);
+  csdb.query(
+    sql.queryString,
+    [...sql.values],
+    function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send({ error: err});
+      } else {
+        console.log('insert success', result);
+        next();
+      }
+    });
+};
+
+cpcController.updateCampus = (req, res, next) => {
+  console.log('in updateCampus');
+  console.log(req.body);
+  console.log(req.body.where);
+  const sql = buildUpdate('UPDATE campus set', req.body.data, req.body.where);
+
+  console.log(sql);
+
+  csdb.query(
+    sql.queryString,
+    [...sql.values],
+    function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send(err);
+      } else {
+        console.log('update success', result);
+        next();
+      }
+    });
+};
+
+module.exports = cpcController;
 

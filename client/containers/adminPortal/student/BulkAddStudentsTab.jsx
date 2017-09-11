@@ -9,9 +9,9 @@
  * ************************************
  */
 
-import React, { Component } from 'react';
-import CpcContainer from '../cpc/CpcContainer.jsx';
-import CohortFileUpload from '../../components/CohortFileUpload.jsx';
+import React from 'react';
+import CpcContainer from '../../cpc/CpcContainer.jsx';
+import CohortFileUpload from './CohortFileUpload.jsx';
 
 const BulkAddStudentsTab = (props) => (
   <section>

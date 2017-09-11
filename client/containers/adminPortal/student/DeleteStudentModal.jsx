@@ -18,8 +18,8 @@ import {
     ModalBody,
     ModalFooter
 } from 'react-modal-bootstrap';
-import * as cpcActions from '../../actions/creators/cpcContainerActions';
-import * as constants from '../../constants';
+import * as cpcActions from '../../../actions/creators/cpcContainerActions';
+import * as constants from '../../../constants';
 
 
 const mapStateToProps = store => ({
@@ -49,13 +49,13 @@ class DeleteStudentModal extends Component {
         this.setState({ isOpen: true });
     }
 
-    hideModal(event) {
+    hideModal() {
         document.getElementById('deleteVerify').value = '';
         this.props.resetModal();
         this.setState({ isOpen: false });
     }
 
-    deleteStudent(student, event) {
+    deleteStudent(student) {
         document.getElementById('deleteVerify').value = '';
         this.setState({ isOpen: false });
         this.props.resetModal();

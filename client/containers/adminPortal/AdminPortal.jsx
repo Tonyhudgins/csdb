@@ -1,14 +1,25 @@
+/**
+ * ************************************
+ *
+ * @module  AdminPortal
+ * @author  smozingo
+ * @date    28.May.2017
+ * @description Hosts tabs for adding/editing campus/program/cohort/student/team data
+ *
+ * ************************************
+ */
+
 import React from 'react';
 import { Tabs, TabLink, TabContent } from 'react-tabs-redux';
 import { connect } from 'react-redux';
-import changeSelectedTab from '../../actions/creators/tabActions';
-import CampusTab from './CampusTab.jsx';
-import AddEditStudentTabs from './AddEditStudentTabs.jsx';
-import AddEditCohortTabs from './AddEditCohortTabs.jsx';
+import changeSelectedTab from '../../actions/creators/tabNavActions';
+import AddEditStudentTabs from './student/AddEditStudentTabs.jsx';
+import AddEditCohortTabs from './cohort/AddEditCohortTabs.jsx';
+import AddEditProgramTabs from './program/AddEditProgramTabs.jsx';
+import AddEditCampusTabs from './campus/AddEditCampusTabs.jsx';
 
 const mapStateToProps = store => ({
-  tabs1: store.addEditState.tabs1,
-  tabs2: store.addEditState.tabs2,
+  adminPortalTabs: store.tabNavState.adminPortalTabs,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -18,10 +29,10 @@ const mapDispatchToProps = dispatch => ({
 const addEditContainer = (props) => (
   <div id="addEditContainer">
     <Tabs
-        name="tabs1"
+        name="adminPortalTabs"
         className="tabs tabs-1"
         handleSelect={props.changeSelectedTab}
-        selectedTab={props.tabs1}
+        selectedTab={props.adminPortalTabs}
         >
 
       <div className="tab-links">
@@ -37,13 +48,13 @@ const addEditContainer = (props) => (
           <AddEditStudentTabs/>
         </TabContent>
         <TabContent for="tabCohort">
-
+          <AddEditCohortTabs/>
         </TabContent>
         <TabContent for="tabProgram">
-          <h1>Program</h1>
+          <AddEditProgramTabs/>
         </TabContent>
         <TabContent for="tabCampus">
-          <CampusTab/>
+          <AddEditCampusTabs/>
         </TabContent>
         <TabContent for="tabTeamMember">
           <h1>Team Member</h1>

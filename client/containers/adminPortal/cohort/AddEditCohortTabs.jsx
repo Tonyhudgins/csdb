@@ -1,12 +1,12 @@
 import React from 'react';
 import { Tabs, TabLink, TabContent } from 'react-tabs-redux';
 import { connect } from 'react-redux';
-import changeSelectedTab from '../../actions/creators/tabActions';
+import changeSelectedTab from '../../../actions/creators/tabNavActions';
 import AddCohortTab from './AddCohortTab.jsx';
-//import EditCohortTab from './EditCohortTab.jsx';
+import EditCohortTab from './EditCohortTab.jsx';
 
 const mapStateToProps = store => ({
-  addEditCohortTabs: store.addEditState.addEditCohortTabs,
+  addEditCohortTabs: store.tabNavState.addEditCohortTabs,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,7 +29,7 @@ const addEditCohortTabs = (props) => (
 
       <div className="content">
         <TabContent for="tabEditCohort">
-          {/*<EditCohortTab/>*/}
+          <EditCohortTab/>
         </TabContent>
         <TabContent for="tabAddCohort">
           <AddCohortTab/>

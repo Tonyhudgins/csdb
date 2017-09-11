@@ -21,7 +21,7 @@ const fetchError = err => ({
   error: true,
 });
 
-// shuffle the students
+// shuffle the student
 const shuffleArray = students => {
   const shuffled = students.slice();
 

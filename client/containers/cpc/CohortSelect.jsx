@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import Option from '../../components/Option.jsx';
 import * as actions from '../../actions/creators/cpcContainerActions';
@@ -29,11 +29,14 @@ const CohortSelect = (props) => {
 
   //console.log('CohortSelect: rendering CohortSelect', props.cohorts.length, cohortOptions);
   return (
-    <div className="cs-selection">
-      <select id="fetchAllCohortSelect" className="cs-select" value={props.currentCohort}
-              onChange={props.handleCohortChange}>
-        {cohortOptions}
-      </select>
+    <div className="cs-wrapper">
+      <div className="cs-label">cohort</div>
+      <div className="cs-selection">
+        <select id="fetchAllCohortSelect" className="cs-select" value={props.currentCohort}
+                onChange={props.handleCohortChange}>
+          {cohortOptions}
+        </select>
+      </div>
     </div>
   );
 };

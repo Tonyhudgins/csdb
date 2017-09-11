@@ -1,15 +1,17 @@
 import React from 'react';
 import Facecards from './facecards/Facecards.jsx';
 import Profile from './Profile.jsx';
-import NewCohort from './addEdit/AddEditTabs.jsx';
+import AdminPortal from './adminPortal/AdminPortal.jsx';
+import Logo from './Logo.jsx';
 import { Switch, Route } from 'react-router-dom';
 
 const Main = (props) => {
 
   // create render functions so we can pass props down to routed components
-  const renderFacecards = facecards => facecardsProps => <Facecards {...props} {...facecardsProps} />;
-  const renderProfile   = profile   => profileProps   => <Profile {...props} {...profileProps} />;
-  const renderNewCohort = cohort    => cohortProps    => <NewCohort {...props} {...cohortProps} />;
+  const renderLogo        = logo      => logoProps      => <Logo {...props} {...logoProps} />;
+  const renderFacecards   = facecards => facecardsProps => <Facecards {...props} {...facecardsProps} />;
+  const renderProfile     = profile   => profileProps   => <Profile {...props} {...profileProps} />;
+  const renderAdminPortal = admin     => adminProps     => <AdminPortal {...props} {...adminProps} />;
 
   return (
     <main id="mainPanel">
@@ -17,7 +19,8 @@ const Main = (props) => {
       <Switch>
         <Route exact path='/facecards' render={renderFacecards(Facecards)} />
         <Route path='/profile' render={renderProfile(Profile)} />
-        <Route exact path='/newCohort' render={renderNewCohort(NewCohort)} />
+        <Route exact path='/adminPortal' render={renderAdminPortal(AdminPortal)} />
+        <Route path='/' render={renderLogo(Logo)} />
       </Switch>
     </main>
   );

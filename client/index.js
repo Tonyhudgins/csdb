@@ -6,15 +6,15 @@ import App from './App.jsx';
 import store from './store';
 import { BrowserRouter } from 'react-router-dom';
 
-const render = (Component) => {
+const render = () => {
   ReactDOM.render(
-    <BrowserRouter>
-      <Provider store={store}>
+    <Provider store={store}>
+      <BrowserRouter>
         <AppContainer>
           <App />
         </AppContainer>
-      </Provider>
-    </BrowserRouter>,
+      </BrowserRouter>
+    </Provider>,
     document.getElementById('contents')
   );
 };

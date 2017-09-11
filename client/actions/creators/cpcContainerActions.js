@@ -71,8 +71,44 @@ export const updateCurrentStudent = (field, value) => ({
   payload: value,
 });
 
+export const updateCurrentCohort = (field, value) => ({
+  type: types.SET_COHORT_DATA,
+  field: field,
+  payload: value,
+});
+
+export const updateCurrentProgram = (field, value) => ({
+  type: types.SET_PROGRAM_DATA,
+  field: field,
+  payload: value,
+});
+
+export const updateCurrentCampus = (field, value) => ({
+  type: types.SET_CAMPUS_DATA,
+  field: field,
+  payload: value,
+});
+
 export const updateNewStudent = (field, value) => ({
   type: types.SET_NEW_STUDENT_DATA,
+  field: field,
+  payload: value,
+});
+
+export const updateNewCohort = (field, value) => ({
+  type: types.SET_NEW_COHORT_DATA,
+  field: field,
+  payload: value,
+});
+
+export const updateNewProgram = (field, value) => ({
+  type: types.SET_NEW_PROGRAM_DATA,
+  field: field,
+  payload: value,
+});
+
+export const updateNewCampus = (field, value) => ({
+  type: types.SET_NEW_CAMPUS_DATA,
   field: field,
   payload: value,
 });
@@ -86,6 +122,9 @@ const fetchError = (err, source) => ({
 
 /*
  Here's where we dispatch actions to update the Campus -> Program -> Cohort -> Students chain
+ We use 'mode' and 'operation' here to modify behavior
+ mode: dropdown|fetchAll|noop
+ operation: add|edit
 */
 export const setCurrentCampusFetchPrograms = (campusId, mode, operation) => dispatch => {
   // if we've got a new campus, go fetch the associated programs
@@ -109,7 +148,7 @@ export const setCurrentProgramFetchCohorts = (programId, mode, operation) => dis
 };
 
 export const setCurrentCohortFetchStudents = (cohortId, mode) => dispatch => {
-  // if we've got a new cohort, go fetch the associated students
+  // if we've got a new cohort, go fetch the associated student
   console.log(`in setCurrentCohortFetchStudents ${cohortId} - fetching StudentList (${mode})`);
   dispatch(fetchStudentListThunk(cohortId));
   dispatch(setCurrentCohort(cohortId));
@@ -122,7 +161,7 @@ export const setCurrentCohortFetchStudents = (cohortId, mode) => dispatch => {
 };
 
 /*
- DB fetch utilities
+ DB fetch promise utilities
 */
 function status(response) {
   if (response.ok) {
@@ -155,6 +194,11 @@ export const fetchCampusListThunk = (mode, operation) => dispatch => {
       //console.log('fetch CAMPUSES: responseData', responseData);
       const campuses = responseData.map(campus => campus.campus_id);
       const campusesById = responseData.reduce((acc, curr, i) => {
+        // controlled form components don't like nulls, so store nulls as empty strings
+        for( let key in curr ) {
+          if(curr[key] === null) curr[key] = '';
+        }
+
         acc[campuses[i]] = curr;
         return acc;
       }, {});
@@ -187,6 +231,11 @@ export const fetchProgramListThunk = (campusId, mode, operation) => dispatch => 
       //console.log('fetch PROGRAM: responseData', responseData);
       const programs = responseData.map(program => program.program_id);
       const programsById = responseData.reduce((acc, curr, i) => {
+        // controlled form components don't like nulls, so store nulls as empty strings
+        for( let key in curr ) {
+          if(curr[key] === null) curr[key] = '';
+        }
+
         acc[programs[i]] = curr;
         return acc;
       }, {});
@@ -218,6 +267,11 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
       console.log('fetch COHORT: responseData', responseData);
       const cohorts = responseData.map(cohort => cohort.cohort_id);
       const cohortsById = responseData.reduce((acc, curr, i) => {
+        // controlled form components don't like nulls, so store nulls as empty strings
+        for( let key in curr ) {
+          if(curr[key] === null) curr[key] = '';
+        }
+
         acc[cohorts[i]] = curr;
         return acc;
       }, {});
@@ -237,7 +291,7 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
             else if (operation === 'noop')
               console.log('noop');
             else
-              console.error(`invalid operation in fetchCohortListThunk: ${operation}`)
+              console.error(`invalid operation in fetchCohortListThunk: ${operation}`);
             break;
           case 'fetchAll':
             dispatch(setCurrentCohortFetchStudents(cohorts[0], mode));
@@ -257,6 +311,10 @@ export const fetchStudentListThunk = (cohortId, studentId) => dispatch => {
   if (studentId) criteria.student_id = studentId;
   let students;
   let studentsById;
+  // these fields must be null if they have no assigned value, otherwise we get errors
+  // on db updates (we can't set these to empty strings if they're null!)
+  const nullFields = ['student_id','cohort_id','tech_talk_id','production_project_id',
+    'precourse_part1_deadline','precourse_part2_deadline','precourse_part3_deadline'];
 
   // fetch the Cohort list from csdb and dispatch accordingly
   const headers = new Headers({ 'Content-Type': 'application/json' });
@@ -274,11 +332,14 @@ export const fetchStudentListThunk = (cohortId, studentId) => dispatch => {
       console.log('fetch STUDENTS: responseData', responseData);
       students = responseData.map(student => student.student_id);
       studentsById = responseData.reduce((acc, curr, i) => {
-        // controlled form components don't like nulls, so store nulls as empty strings
-        console.log('curr',curr);
+        // controlled form components don't like nulls, so store nulls as empty strings/zeros
         for( let key in curr ) {
-          console.log(key,'=>', curr[key]);
-          if(curr[key] === null) curr[key] = '';
+          console.log( key, '=>', curr[key]);
+          if(curr[key] === null)
+            if(nullFields.includes(key))
+              curr[key] = null;
+            else
+              curr[key] = '';
         }
 
         acc[students[i]] = curr;
@@ -301,7 +362,6 @@ export const fetchStudentListThunk = (cohortId, studentId) => dispatch => {
 */
 export const postCurrentStudentThunk = (student) => dispatch => {
   console.log(`in postCurrentStudentThunk - studentId: ${student.student_id}`);
-  const criteria = {};
 
   // fetch the Cohort list from csdb and dispatch accordingly
   fetch('http://localhost:8080/updateStudent',
@@ -323,7 +383,6 @@ export const postCurrentStudentThunk = (student) => dispatch => {
 
 export const postNewStudentThunk = (student) => dispatch => {
   console.log(`in postNewStudentThunk - studentId: ${student.student_id}`);
-  const criteria = {};
 
   fetch('http://localhost:8080/createStudent',
     {
@@ -361,7 +420,7 @@ export const deleteCurrentStudentThunk = (status, student_id, cohort_id) => disp
         })
         .catch(err => dispatch(fetchError(err, 'deleteStudentThunk')));
 
-}
+};
 
 export const postStudentImageThunk = (image, image_type, student_id, cohort_id) => dispatch => {
     console.log(`in postStudentImageThunk - studentId: ${student_id} type: ${image_type} file:${image.name}`);
@@ -389,7 +448,7 @@ export const postStudentImageThunk = (image, image_type, student_id, cohort_id) 
 
         })
         .catch(err => dispatch(fetchError(err, 'postStudentImageThunk')));
-}
+};
 
 export const postBulkStudentsThunk = (data, cohort_id) => dispatch => {
   console.log(`in postBulkStudentsThunk - cohortId: ${cohort_id} count:${data.length}`);
@@ -411,5 +470,108 @@ export const postBulkStudentsThunk = (data, cohort_id) => dispatch => {
 
     })
     .catch(err => dispatch(fetchError(err, 'postBulkStudentsThunk')));
-}
+};
 
+export const postCurrentCohortThunk = (cohort) => dispatch => {
+  console.log(`in postCurrentCohortThunk - studentId: ${cohort.cohort_id}`);
+
+  fetch('http://localhost:8080/updateCohort',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ data: cohort, where: { eq: { cohort_id: cohort.cohort_id }} }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('post current COHORT: responseData', responseData);
+    })
+    .catch(err => dispatch(fetchError(err, 'postCurrentCohortThunk')));
+};
+
+export const postNewCohortThunk = (cohort) => dispatch => {
+  console.log(`in postNewCohortThunk - cohortId: ${cohort.cohort_id}`);
+
+  fetch('http://localhost:8080/createCohort',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ data: cohort }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('post New COHORT: responseData', responseData);
+    })
+    .catch(err => dispatch(fetchError(err, 'postNewCohortThunk')));
+};
+
+
+export const postCurrentProgramThunk = (program) => dispatch => {
+  console.log(`in postCurrentProgramThunk - studentId: ${program.program_id}`);
+
+  fetch('http://localhost:8080/updateProgram',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ data: program, where: { eq: { program_id: program.program_id }} }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('post current PROGRAM: responseData', responseData);
+    })
+    .catch(err => dispatch(fetchError(err, 'postCurrentProgramThunk')));
+};
+
+export const postNewProgramThunk = (program) => dispatch => {
+  console.log(`in postNewProgramThunk - programId: ${program.program_id}`);
+
+  fetch('http://localhost:8080/createProgram',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ data: program }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('post New PROGRAM: responseData', responseData);
+    })
+    .catch(err => dispatch(fetchError(err, 'postNewProgramThunk')));
+};
+
+
+export const postCurrentCampusThunk = (campus) => dispatch => {
+  console.log(`in postCurrentCampusThunk - studentId: ${campus.campus_id}`);
+
+  fetch('http://localhost:8080/updateCampus',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ data: campus, where: { eq: { campus_id: campus.campus_id }} }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('post current CAMPUS: responseData', responseData);
+    })
+    .catch(err => dispatch(fetchError(err, 'postCurrentCampusThunk')));
+};
+
+export const postNewCampusThunk = (campus) => dispatch => {
+  console.log(`in postNewCampusThunk - campusId: ${campus.campus_id}`);
+
+  fetch('http://localhost:8080/createCampus',
+    {
+      method: 'post',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ data: campus }),
+    })
+    .then(status)
+    .then(json)
+    .then(function (responseData) {
+      console.log('post New CAMPUS: responseData', responseData);
+    })
+    .catch(err => dispatch(fetchError(err, 'postNewCampusThunk')));
+};

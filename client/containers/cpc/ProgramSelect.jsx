@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import Option from '../../components/Option.jsx';
 import * as actions from '../../actions/creators/cpcContainerActions';
@@ -30,11 +30,14 @@ const ProgramSelect = (props) => {
 
   //console.log('ProgramSelect: rendering ProgramSelect', props.programs.length, programOptions);
   return (
-    <div className="cs-selection">
-      <select id="fetchAllProgramSelect" className="cs-select" value={props.currentProgram}
-              onChange={props.handleProgramChange}>
-        {programOptions}
-      </select>
+    <div className="cs-wrapper">
+      <div className="cs-label">program</div>
+      <div className="cs-selection">
+        <select id="fetchAllProgramSelect" className="cs-select" value={props.currentProgram}
+                onChange={props.handleProgramChange}>
+          {programOptions}
+        </select>
+      </div>
     </div>
   );
 };

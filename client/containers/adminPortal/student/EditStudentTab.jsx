@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import CpcContainer from '../cpc/CpcContainer.jsx';
+import CpcContainer from '../../cpc/CpcContainer.jsx';
 import StudentForm from './StudentForm.jsx';
 
 const mapStateToProps = store => ({

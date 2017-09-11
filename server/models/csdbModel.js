@@ -4,19 +4,19 @@ const pg = require('pg');
 // and client options
 // note: all config is optional and the environment variables
 // will be read if the config is not present
-var config = {
+const config = {
   user: 'klazzmgh', //env var: PGUSER
   database: 'klazzmgh', //env var: PGDATABASE
   password: '2JAVSPQ4X0RpZ_XAyClXhbQwEmSy5Vf4', //env var: PGPASSWORD
   host: 'stampy.db.elephantsql.com', // Server hosting the postgres database
   port: 5432, //env var: PGPORT
-  max: 10, // max number of clients in the pool
+  max: 5, // max number of clients in the pool
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
 //this initializes a connection pool
 //it will keep idle connections open for 30 seconds
-//and set a limit of maximum 10 idle clients
+//and set a limit of maximum 5 idle clients
 const pool = new pg.Pool(config);
 
 pool.on('error', function (err, client) {

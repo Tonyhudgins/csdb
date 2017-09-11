@@ -11,12 +11,13 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import USStates from '../../components/OptionsUSStates.jsx';
-import Option from '../../components/Option.jsx';
-import ImageDropzone from '../../components/ImageDropzone.jsx';
-import StudentSelect from '../cpc/StudentSelect.jsx';
+import USStates from '../../../components/OptionsUSStates.jsx';
+import Option from '../../../components/Option.jsx';
+import ImageDropzone from '../../../components/ImageDropzone.jsx';
+import StudentSelect from '../../cpc/StudentSelect.jsx';
 import DeleteStudentModal from './DeleteStudentModal.jsx';
-import * as cpcActions from '../../actions/creators/cpcContainerActions';
+import * as cpcActions from '../../../actions/creators/cpcContainerActions';
+import InputTextField from "../../../components/InputTextField.jsx";
 
 const mapStateToProps = store => ({
   newStudent:       store.cpcState.newStudent,
@@ -36,7 +37,6 @@ const mapStateToProps = store => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
 
   init: (operation) => {
-    let mode = '';
     if (operation === 'add') {
       dispatch(cpcActions.updateNewStudent('state', 'CA'));
       dispatch(cpcActions.updateNewStudent('cohort_id', 1));
@@ -87,12 +87,12 @@ class StudentForm extends Component {
     this.state = { modal: false };
   }
 
-  createModal(event, student) {
+  createModal(event) {
     event.preventDefault();
     this.setState({ modal: true });
   }
 
-  resetModal(event) {
+  resetModal() {
     this.setState({ modal: false });
   }
 
@@ -108,6 +108,8 @@ class StudentForm extends Component {
 
   render() {
     const student = this.props.student;
+    const handleChange = this.props.handleChange.bind(this);
+    const operation = this.props.operation;
 
     console.log(`StudentForm (${this.props.operation}) in render`, student);
     // if the student object is empty, reset the form
@@ -181,25 +183,25 @@ class StudentForm extends Component {
             <div className="col-md-4">
               <div className="input-group">
                 <span className="input-group-addon">First Name</span>
-                <input id="firstName" name="first_name" className="form-control"
-                       placeholder="" type="text" value={student.first_name}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="firstName" name="first_name" className="form-control"
+                       placeholder="" value={student.first_name}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
             <div className="col-md-4">
               <div className="input-group">
                 <span className="input-group-addon">Middle Name</span>
-                <input id="middleName" name="middle_name" className="form-control"
-                       placeholder="" type="text" value={student.middle_name}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="middleName" name="middle_name" className="form-control"
+                       placeholder="" value={student.middle_name}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
             <div className="col-md-4">
               <div className="input-group">
                 <span className="input-group-addon">Last Name</span>
-                <input id="lastName" name="last_name" className="form-control"
-                       placeholder="" type="text" value={student.last_name}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="lastName" name="last_name" className="form-control"
+                       placeholder="" value={student.last_name}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
@@ -207,7 +209,7 @@ class StudentForm extends Component {
             <label className="col-md-1 control-label" htmlFor="dropdownCampusSelect">Campus</label>
             <div className="col-md-3">
               <select id="dropdownCampusSelect" className="form-control"
-                      onChange={(event) => this.props.handleCampusChange(this.props.operation, event)}
+                      onChange={(event) => this.props.handleCampusChange(operation, event)}
                       value={student.campus_id}>
                 {campusOptions}
               </select>
@@ -216,7 +218,7 @@ class StudentForm extends Component {
                    htmlFor="dropdownProgramSelect">Program</label>
             <div className="col-md-3">
               <select id="dropdownProgramSelect" className="form-control"
-                      onChange={(event) => this.props.handleProgramChange(this.props.operation, event)}
+                      onChange={(event) => this.props.handleProgramChange(operation, event)}
                       value={student.program_id}>
                 {programOptions}
               </select>
@@ -226,7 +228,7 @@ class StudentForm extends Component {
             <div className="col-md-3">
               <select id="dropdownCohortSelect" name="cohort_id"
                       className="form-control"
-                      onChange={(event) => this.props.handleChange(this.props.operation, event)}
+                      onChange={(event) => handleChange(operation, event)}
                       value={student.cohort_id}>
                 {cohortOptions}
               </select>
@@ -236,9 +238,9 @@ class StudentForm extends Component {
             <div className="col-md-12">
               <div className="input-group">
                 <span className="input-group-addon">Address 1</span>
-                <input id="address1" name="street_address_1" className="form-control"
-                       placeholder="123 Tech Ave" type="text" value={student.street_address_1}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="address1" name="street_address_1" className="form-control"
+                       placeholder="123 Tech Ave" value={student.street_address_1}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
@@ -246,9 +248,10 @@ class StudentForm extends Component {
             <div className="col-md-12">
               <div className="input-group">
                 <span className="input-group-addon">Address 2</span>
-                <input id="address2" name="street_address_2" className="form-control"
-                       placeholder="Suite 1A" type="text" value={student.street_address_2}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField
+                  id="address2" name="street_address_2" className="form-control"
+                  placeholder="Suite 1A" value={student.street_address_2}
+                  onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
@@ -256,21 +259,22 @@ class StudentForm extends Component {
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">City</span>
-                <input id="city" name="city" className="form-control"
-                       placeholder="Los Angeles" type="text" value={student.city}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="city" name="city" className="form-control"
+                       placeholder="Los Angeles" value={student.city}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
             <div className="col-md-2">
               <USStates name="state" selectedState={student.state}
-                        handleChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                        onChange1={(event) => handleChange(operation, event)}
+                        onChange={(event) => handleChange(operation, event)}/>
             </div>
             <div className="col-md-4">
               <div className="input-group">
                 <span className="input-group-addon">Zip Code</span>
-                <input id="zipCode" name="zip_code" className="form-control"
-                       placeholder="90066" type="text" value={student.zip_code}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="zipCode" name="zip_code" className="form-control"
+                       placeholder="90066" value={student.zip_code}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
@@ -278,17 +282,17 @@ class StudentForm extends Component {
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">Primary Phone</span>
-                <input id="primaryPhone" name="primary_phone" className="form-control"
+                <InputTextField id="primaryPhone" name="primary_phone" className="form-control"
                        placeholder="" type="tel" value={student.primary_phone}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">Secondary Phone</span>
-                <input id="secondaryPhone" name="secondary_phone" className="form-control"
+                <InputTextField id="secondaryPhone" name="secondary_phone" className="form-control"
                        placeholder="" type="tel" value={student.secondary_phone}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
@@ -296,17 +300,17 @@ class StudentForm extends Component {
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">Emergency Contact</span>
-                <input id="emergencyContact" name="emergency_contact" className="form-control"
-                       placeholder="" type="text" value={student.emergency_contact}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="emergencyContact" name="emergency_contact" className="form-control"
+                       placeholder="" value={student.emergency_contact}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">Emergency Phone</span>
-                <input id="emergencyPhone" name="emergency_contact_phone" className="form-control"
+                <InputTextField id="emergencyPhone" name="emergency_contact_phone" className="form-control"
                        placeholder="" type="tel" value={student.emergency_contact_phone}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
@@ -314,24 +318,24 @@ class StudentForm extends Component {
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">Email</span>
-                <input id="email" name="email" className="form-control"
+                <InputTextField id="email" name="email" className="form-control"
                        placeholder="" type="email" value={student.email}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
             <div className="col-md-6">
               <div className="input-group">
                 <span className="input-group-addon">Github Name</span>
-                <input id="githubName" name="github_name" className="form-control"
-                       placeholder="" type="text" value={student.github_name}
-                       onChange={(event) => this.props.handleChange(this.props.operation, event)}/>
+                <InputTextField id="githubName" name="github_name" className="form-control"
+                       placeholder="" value={student.github_name}
+                       onChange={(event) => handleChange(operation, event)}/>
               </div>
             </div>
           </div>
           <div className="form-group">
             <div className="col-md-6">
               <button id="btnStudentUpdateSubmit" className="btn btn-primary"
-                      onClick={(event) => this.props.handleSubmit(student, this.props.operation, event)}>
+                      onClick={(event) => this.props.handleSubmit(student, operation, event)}>
                 Submit
               </button>
             </div>

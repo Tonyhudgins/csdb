@@ -4,14 +4,22 @@ import { Link } from 'react-router-dom';
 const Menu = (props) => (
   <nav>
     <form>
-      <input id="search" name="search" placeholder="search"></input>
+      <input id="search" name="search" placeholder="search" />
     </form>
     <div id="menu">
+      <section id="menuAdmin">
+        <h1>Admin</h1>
+        <ul>
+          <li><strong><Link to="/adminPortal">CS Admin Portal</Link></strong></li>
+          <li>Financials</li>
+          <li>Hiring Partners</li>
+        </ul>
+      </section>
       <section id="menuStudentProfiles">
         <h1>Student Profiles</h1>
         <ul>
           <li>Contact</li>
-          <li><Link to="/profile">Progress</Link></li>
+          <li><strong><Link to="/profile">Progress</Link></strong></li>
           <li>Projects</li>
           <li>Attendance</li>
           <li>Pre Course</li>
@@ -21,7 +29,7 @@ const Menu = (props) => (
       <section id="menuCohortDashboards">
         <h1>Cohort Dashboards</h1>
         <ul>
-          <li><Link to="/facecards">Facecards</Link></li>
+          <li><strong><Link to="/facecards">Facecards</Link></strong></li>
           <li>Schedule</li>
           <li>Hack Hours</li>
           <li>Resources</li>
@@ -41,14 +49,6 @@ const Menu = (props) => (
         <ul>
           <li>Alumni Contacts</li>
           <li>Interview Questions</li>
-        </ul>
-      </section>
-      <section id="menuAdmin">
-        <h1>Admin</h1>
-        <ul>
-          <li><Link to="/newCohort">CS Admin Portal</Link></li>
-          <li>Financials</li>
-          <li>Hiring Partners</li>
         </ul>
       </section>
     </div>

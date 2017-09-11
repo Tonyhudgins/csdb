@@ -7,9 +7,9 @@ const cpcContainer = (props) => (
     <div id="cpcDashboard">
       <header>
         <div id="cpcMenu">
-          <CampusSelect/>
-          <ProgramSelect/>
-          <CohortSelect/>
+          { props.exclude && props.exclude.match(/CampusSelect/)  ? null : <CampusSelect/> }
+          { props.exclude && props.exclude.match(/ProgramSelect/) ? null : <ProgramSelect/> }
+          { props.exclude && props.exclude.match(/CohortSelect/)  ? null : <CohortSelect/> }
         </div>
       </header>
     </div>

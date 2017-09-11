@@ -12,7 +12,8 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
-import * as cpcActions from '../actions/creators/cpcContainerActions';
+import { Table } from 'react-bootstrap';
+import * as cpcActions from '../../../actions/creators/cpcContainerActions';
 import csv from 'csv';
 
 const mapStateToProps = store => ({
@@ -26,7 +27,7 @@ const mapStateToProps = store => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onDrop: (files, cohort_id) => {
     // set up an array to hold all the student information
-    const studentData = [];
+
     console.log(`Dropped ${files[0].name} cohort:${cohort_id}`);
     const reader = new FileReader();
     reader.onload = () => {
@@ -65,7 +66,7 @@ class CohortFileUpload extends React.Component {
             <h4>Provide a comma separated file with the following field names supplied in the first record.  Not all fields are required, but all records must follow the same format.  Do not quote strings.</h4>
             <div>
               <div id="cohortFileSpec">
-                <table className="tg">
+                <Table className="tg">
                   <tbody>
                     <tr>
                       <th>Field</th>
@@ -158,7 +159,7 @@ class CohortFileUpload extends React.Component {
                       <td>1 - precourse<br/>2 - active<br/>3 - alumni<br/>4 - deferred<br/>5 - deleted</td>
                     </tr>
                   </tbody>
-                </table>
+                </Table>
               </div>
               <div id="cohortFileDropzone">
                 <Dropzone className="dropzone" accept=".csv" multiple={false} disablePreview={false}

@@ -11,12 +11,11 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  tabs1: null,
-  tabs2: null,
+  adminPortalTabs: null,
 };
 
-const addEditReducer = function (state = initialState, action) {
-  console.log(`in addEditReducer.  Action: ${action.type}`);
+const tabNavReducer = function (state = initialState, action) {
+  console.log(`in tabNavReducer.  Action: ${action.type}`);
   console.log(`details: ${JSON.stringify(action)}`);
   switch (action.type) {
     case types.CHANGE_SELECTED_TAB:
@@ -29,4 +28,4 @@ const addEditReducer = function (state = initialState, action) {
   }
 };
 
-export default addEditReducer;
+export default tabNavReducer;

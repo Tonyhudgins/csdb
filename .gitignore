@@ -1,0 +1,9 @@
+
+.DS_Store
+.idea/
+dist/
+node_modules/
+node_modules_old/
+package.json~
+test.js
+.nyc_output/

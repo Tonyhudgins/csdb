@@ -24,6 +24,9 @@ const initialState = {
   currentCohort: 1,
   currentStudent: 0,
   newStudent: {},
+  newCohort: {},
+  newProgram: {},
+  newCampus: {},
   simpleCampusesList: [],
   simpleCampusesById: {},
   simpleProgramsList: [],
@@ -79,7 +82,7 @@ const cpcReducer = function (state = initialState, action) {
       });
     case types.FETCH_ERROR:
       console.error(`Failed on fetch: ${action.source}`);
-      console.error(action.err);
+      console.error(action.err.error ? action.err.error : action.err);
       return state;
     case types.SET_CURRENT_CAMPUS:
       return Object.assign({}, state, { currentCampus: action.payload });
@@ -105,6 +108,63 @@ const cpcReducer = function (state = initialState, action) {
     case types.SET_NEW_STUDENT_DATA:
       return update(state, {
         newStudent: {
+          [action.field]: { $set: action.payload },
+        },
+      });
+    case types.SET_COHORT_DATA:
+      if(state.currentCohort) {
+        return update(state, {
+          cohortsById: {
+            [state.currentCohort]: {
+              [action.field]: { $set: action.payload },
+            },
+          },
+        });
+      } else {
+        console.log(`Will not attempt to update non-existing cohort ${state.currentCohort}`);
+        return state;
+      }
+    case types.SET_NEW_COHORT_DATA:
+      return update(state, {
+        newCohort: {
+          [action.field]: { $set: action.payload },
+        },
+      });
+    case types.SET_PROGRAM_DATA:
+      if(state.currentProgram) {
+        return update(state, {
+          programsById: {
+            [state.currentProgram]: {
+              [action.field]: { $set: action.payload },
+            },
+          },
+        });
+      } else {
+        console.log(`Will not attempt to update non-existing program ${state.currentProgram}`);
+        return state;
+      }
+    case types.SET_NEW_PROGRAM_DATA:
+      return update(state, {
+        newProgram: {
+          [action.field]: { $set: action.payload },
+        },
+      });
+    case types.SET_CAMPUS_DATA:
+      if(state.currentCampus) {
+        return update(state, {
+          campusesById: {
+            [state.currentCampus]: {
+              [action.field]: { $set: action.payload },
+            },
+          },
+        });
+      } else {
+        console.log(`Will not attempt to update non-existing campus ${state.currentCampus}`);
+        return state;
+      }
+    case types.SET_NEW_CAMPUS_DATA:
+      return update(state, {
+        newCampus: {
           [action.field]: { $set: action.payload },
         },
       });

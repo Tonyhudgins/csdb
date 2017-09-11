@@ -12,15 +12,13 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-import facecardsReducer from './facecardsReducer';
 import cpcReducer from './cpcReducer';
-import addEditReducer from './addEditReducer';
+import tabNavReducer from './tabNavReducer';
 
 // Combine reducers
 const reducers = combineReducers({
-  facecardsState: facecardsReducer,
   cpcState: cpcReducer,
-  addEditState: addEditReducer,
+  tabNavState: tabNavReducer,
 });
 
 export default reducers;

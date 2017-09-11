@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import Option from '../../components/Option.jsx';
 import * as cpcActions from '../../actions/creators/cpcContainerActions';
@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const StudentSelect = (props) => {
-  // create an option list out of our available students
+  // create an option list out of our available student
   let studentOptions = [];
   if (props.students && props.students.length) {
     studentOptions = props.students.map((studentId, i) => (

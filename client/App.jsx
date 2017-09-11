@@ -16,15 +16,6 @@ import Main from './containers/Main.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-
-    // function bindings
-    this.uploadCohortFile = this.uploadCohortFile.bind(this);
-  }
-
-  uploadCohortFile(event) {
-    console.log('in ucf');
-    const file = document.querySelector('#' + event.target.id).files[0];
-    console.log('ucf', file);
   }
 
   // displayed on page
@@ -39,8 +30,7 @@ class App extends Component {
           <div className="clear"></div>
           <Menu className="menu" />
         </nav>
-        <Main uploadCohortFile={this.uploadCohortFile}
-              className="main" />
+        <Main className="main" />
       </div>
     );
   }

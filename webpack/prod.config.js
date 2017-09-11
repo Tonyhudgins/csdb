@@ -5,12 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const entry = [
   'babel-polyfill',
-  'react-hot-loader/patch',
-  'webpack-hot-middleware/client?noInfo=false',
   './client/index.js',
-// 'webpack/hot/dev-server',
-//'webpack-dev-server/client?http://localhost:8080/',
-//'webpack-hot-middleware/client?http://localhost:8080/',
 ];
 
 const output = {
@@ -19,10 +14,7 @@ const output = {
   filename: 'bundle.js',
 };
 
-const devtool = 'source-map';
-
 const plugins = [
-  new webpack.HotModuleReplacementPlugin(),
   //  new webpack.NamedModulesPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
   new ExtractTextPlugin('style.css'),
@@ -39,7 +31,7 @@ const cssLoader = [
    */
 ];
 
-module.exports = { entry, output, devtool, plugins,
+module.exports = { entry, output, plugins,
   module: {
     rules: [
       {
@@ -60,34 +52,3 @@ module.exports = { entry, output, devtool, plugins,
     ],
   },
 };
-/*
- const path = require('path');
-
- const HtmlWebpackPlugin = require('html-webpack-plugin');
- const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
- template: './client/index.html',
- filename: 'index.html',
- inject: 'body',
- });
-
- module.exports = {
- entry: [
- './client/index.js',
- 'webpack/hot/dev-server',
- 'webpack-dev-server/client?http://localhost:8080',
- ],
- output: {
- path: path.join(__dirname, 'dist'),
- publicPath: '/dist/',
- filename: 'bundle.js',
- },
- module: {
- loaders: [
- { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
- { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
- ],
- },
- plugins: [HtmlWebpackPlugin],
- };
- */
-

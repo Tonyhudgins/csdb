@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const studentController = require('./controllers/studentController');
+const cpcController = require('./controllers/cpcController');
 
 const app = express();
 
@@ -31,65 +31,107 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './../')));
 
 app.post('/bioImg',
-  studentController.getBioImages,
+  cpcController.getBioImages,
   (req, res) => {
     res.status(200).json(res.studentData);
   }
 );
 
-app.post('/createStudent',
-  studentController.createStudent,
-  (req, res) => {
-    res.status(200).send('success!');
-  }
-);
-
 app.get('/campusList',
-  studentController.getCampuses,
+  cpcController.getCampuses,
   (req, res) => {
     res.status(200).json(res.campusList);
   }
 );
 
 app.post('/programList',
-  studentController.getPrograms,
+  cpcController.getPrograms,
   (req, res) => {
     res.status(200).json(res.programList);
   }
 );
 
 app.post('/cohortList',
-  studentController.getCohorts,
+  cpcController.getCohorts,
   (req, res) => {
     res.status(200).json(res.cohortList);
   }
 );
 
 app.post('/studentList',
-  studentController.getStudents,
+  cpcController.getStudents,
   (req, res) => {
     res.status(200).json(res.studentList);
   }
 );
 
+app.post('/createStudent',
+  cpcController.createStudent,
+  (req, res) => {
+    res.status(200).send({"message": "Student created"});
+  }
+);
+
 app.post('/updateStudent',
-  studentController.updateStudent,
+  cpcController.updateStudent,
   (req, res) => {
     res.status(200).send({"message": "Student updated"});
   }
 );
 
 app.post('/imageUpload',
-    studentController.updateImage,
+    cpcController.updateImage,
     (req, res) => {
     res.status(200).send({"message": "Image updated"});
     }
 );
 
 app.post('/bulkStudentsUpload',
-  studentController.bulkStudentsUpload,
+  cpcController.bulkStudentsUpload,
   (req, res) => {
     res.status(200).send({"message": "Bulk Update Complete"});
+  }
+);
+
+app.post('/createCohort',
+  cpcController.createCohort,
+  (req, res) => {
+    res.status(200).send({"message": "Cohort created"});
+  }
+);
+
+app.post('/updateCohort',
+  cpcController.updateCohort,
+  (req, res) => {
+    res.status(200).send({"message": "Cohort updated"});
+  }
+);
+
+app.post('/createProgram',
+  cpcController.createProgram,
+  (req, res) => {
+    res.status(200).send({"message": "Program created"});
+  }
+);
+
+app.post('/updateProgram',
+  cpcController.updateProgram,
+  (req, res) => {
+    res.status(200).send({"message": "Program updated"});
+  }
+);
+
+app.post('/createCampus',
+  cpcController.createCampus,
+  (req, res) => {
+    res.status(200).send({"message": "Campus created"});
+  }
+);
+
+app.post('/updateCampus',
+  cpcController.updateCampus,
+  (req, res) => {
+    res.status(200).send({"message": "Campus updated"});
   }
 );
 

@@ -14,8 +14,6 @@ const mapStateToProps    = store    => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getStudentFacecards: cohortId => { cohortId ? dispatch(fetchStudentFacecardsThunk(cohortId)) : null; },
-
   init: () => {
     dispatch(cpcActions.fetchCampusListThunk('dropdown', 'noop'));
   },
@@ -47,7 +45,7 @@ class Facecards extends Component {
 
     let studentCards = [];
     if (this.props.students && this.props.students.length) {
-      // randomize the students and build our flashcard array
+      // randomize the student and build our flashcard array
       studentCards = this.props.students.sort((a,b) => .5 - Math.random()).map((student, i) => (
         <StudentFlashcard
           key={i}
@@ -65,8 +63,8 @@ class Facecards extends Component {
       <div>
         <CpcContainer />
         <div className="clear"></div>
-        <section id="facecards" className="container">
-          <div className="row person">
+        <section id="facecards" className="facecardsContainer">
+          <div className="person">
             <Carousel wrapAround={true}>
               {studentCards}
             </Carousel>

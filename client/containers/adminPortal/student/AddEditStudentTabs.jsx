@@ -1,13 +1,13 @@
 import React from 'react';
 import { Tabs, TabLink, TabContent } from 'react-tabs-redux';
 import { connect } from 'react-redux';
-import changeSelectedTab from '../../actions/creators/tabActions';
+import changeSelectedTab from '../../../actions/creators/tabNavActions';
 import AddStudentTab from './AddStudentTab.jsx';
 import EditStudentTab from './EditStudentTab.jsx';
 import BulkAddStudentsTab from './BulkAddStudentsTab.jsx';
 
 const mapStateToProps = store => ({
-  addEditStudentTabs: store.addEditState.addEditStudentTabs,
+  addEditStudentTabs: store.tabNavState.addEditStudentTabs,
 });
 
 const mapDispatchToProps = dispatch => ({

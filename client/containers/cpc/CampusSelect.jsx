@@ -37,11 +37,14 @@ class CampusSelect extends Component {
     }
 
     return (
-      <div className="cs-selection">
-        <select id="fetchAllCampusSelect" className="cs-select" value={this.props.currentCampus}
-                onChange={this.props.handleCampusChange}>
-          {this.campusOptions}
-        </select>
+      <div className="cs-wrapper">
+        <div className="cs-label">campus</div>
+        <div className="cs-selection">
+          <select id="fetchAllCampusSelect" className="cs-select" value={this.props.currentCampus}
+                  onChange={this.props.handleCampusChange}>
+            {this.campusOptions}
+          </select>
+        </div>
       </div>
     );
   }
