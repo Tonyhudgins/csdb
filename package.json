@@ -9,7 +9,8 @@
     "watch": "webpack -w ./client/index.js ./dist/bundle.js",
     "build": "webpack -p --config webpack/prod.config.js",
     "dev:hot": "webpack-dev-server --config ./webpack/dev.config.js --hot --inline --progress --colors --watch --content-base ./",
-    "test": "mocha --compilers js:babel-core/register -w test/helpers/browser.js test/*.spec.js"
+    "test": "mocha --compilers js:babel-core/register -w test/helpers/browser.js test/*.spec.js",
+    "test:watch": "npm test -- --watch"
   },
   "keywords": [],
   "author": "Schno Mozingo",
