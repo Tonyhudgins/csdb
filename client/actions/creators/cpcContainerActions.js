@@ -12,6 +12,8 @@
 import * as types from '../actionTypes';
 import * as constants from '../../constants';
 
+import fetch from 'isomorphic-fetch';
+
 /*
  ACTIONS - These get dispatched to the appropriate reducers to update state
 */
@@ -182,7 +184,7 @@ function json(response) {
   Async fetch calls to the database
 */
 export const fetchCampusListThunk = (mode, operation) => dispatch => {
-  console.log(`in fetchCampusListThunk mode: ${mode}`);
+  console.log(`in fetchCampusListThunk mode: ${mode} operation: ${operation}`);
 
   // fetch the Campus list from csdb and dispatch accordingly
   fetch('http://localhost:8080/campusList', { method: 'get' })
