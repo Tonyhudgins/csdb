@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node ./server/server.js",
-    "dev": "NODE_ENV=development node ./server/server.js",
-    "watch": "webpack -w ./client/index.js ./dist/bundle.js",
-    "build": "webpack -p",
-    "test": "mocha --compilers js:babel-core/register -w test/helpers/browser.js test/*.spec.js"
+    "start"     : "NODE_ENV=production node ./server/server.js",
+    "dev"       : "NODE_ENV=development nodemon ./server/server.js",
+    "build:dev" : "NODE_ENV=development webpack --config ./webpack/dev.config.js",
+    "build:prod": "NODE_ENV=production webpack --config ./webpack/prod.config.js",
+    "dev:hot"   : "webpack-dev-server",
+    "test"      : "mocha --compilers js:babel-core/register -w test/helpers/browser.js test/*.spec.js"
   },
   "keywords": [],
   "author": "Schno Mozingo",
@@ -48,6 +49,7 @@
     "bcrypt": "^1.0.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.16.0",
+    "config": "^1.28.1",
     "csv": "^1.1.1",
     "express": "^4.14.1",
     "file-loader": "^0.11.1",

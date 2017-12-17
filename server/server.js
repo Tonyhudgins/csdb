@@ -4,28 +4,39 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const cpcController = require('./controllers/cpcController');
 
+// config files cascade from default to (development|production)
+const config = require('config');
+
 const app = express();
 
+const HOST = config.get('server.host');
+const PORT = process.env.PORT || config.get('server.port');
+
 /* eslint-disable global-require */
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
+  console.log('This is a production run.');
+}
+else {
+    console.log('This is not a production run. Running webpack dev middleware');
     const webpack = require('webpack');
     const webpackDevMiddleware = require('webpack-dev-middleware');
     const webpackHotMiddleware = require('webpack-hot-middleware');
-
-    const webpackConfig = require('../webpack.config.js');
+    const webpackConfig = require('../webpack/dev.config.js');
     const compiler = webpack(webpackConfig);
 
     app.use(webpackDevMiddleware(compiler, {
+        hot: true,
         publicPath: webpackConfig.output.publicPath,
+        headers: {'Access-Control-Allow-Origin': '*'},
         noInfo: true
     }));
 
     app.use(webpackHotMiddleware(compiler));
 }
 /* eslint-enable */
+console.log("Server using",config.get('file'),"configuration");
 
-
-app.use(logger('dev'));
+app.use(logger(':date[clf] :method :url :status :response-time ms - :res[content-length]', { skip: (req, res) => req.url.match('sockjs')}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/images', express.static(path.join(__dirname, '../client/assets/images')));
@@ -143,10 +154,12 @@ app.post('/updateCampus',
     }
 );
 
-app.get('*', (req, res) => res.redirect('http://localhost:8085/'));
+app.get('*', (req, res) => res.redirect('http://localhost:' + PORT + '/'));
 
-console.log(new Date() + ' server listening on port 8085');
 
-app.listen(8085);
+
+app.listen(PORT, (err) => {
+  console.log(new Date(), err || 'server listening on port '  + PORT);
+});
 
 module.exports = app;
