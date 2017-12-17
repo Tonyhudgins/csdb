@@ -1,0 +1,10 @@
+{
+  "file": "default",
+  "server": {
+    "host": "http://localhost:",
+    "port": "8085"
+  },
+  "database": {
+
+  }
+}
