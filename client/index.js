@@ -5,13 +5,14 @@ import { AppContainer } from 'react-hot-loader';
 import App from './App.jsx';
 import store from './store';
 import { BrowserRouter } from 'react-router-dom';
+import './stylesheets/style.scss';
 
-const render = () => {
+const render = (Component) => {
   ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
         <AppContainer>
-          <App />
+          <Component />
         </AppContainer>
       </BrowserRouter>
     </Provider>,
@@ -22,6 +23,7 @@ const render = () => {
 render(App);
 
 if (module.hot) {
+  console.log('module is hot!')
   module.hot.accept('./App.jsx', () => {
     render(App);
   });

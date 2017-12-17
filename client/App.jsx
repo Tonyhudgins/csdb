@@ -24,7 +24,7 @@ class App extends Component {
       <div>
         <nav id="menuPanel">
           <div id="logo">
-            <img src="./client/assets/images/csLogoTransSm.png" />
+            <img src="images/csLogoTransSm.png" />
             <span id="logoDashboard">Dashboard</span>
           </div>
           <div className="clear"></div>

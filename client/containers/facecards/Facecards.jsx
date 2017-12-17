@@ -34,7 +34,7 @@ class Facecards extends Component {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     console.log('Facecards in CWM');
     this.props.init(this.props.operation);
   }

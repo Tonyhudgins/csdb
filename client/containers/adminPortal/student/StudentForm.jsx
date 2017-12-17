@@ -96,12 +96,8 @@ class StudentForm extends Component {
     this.setState({ modal: false });
   }
 
-  componentWillMount() {
-    console.log('StudentForm in CWM operation:', this.props.operation);
-    this.props.init(this.props.operation);
-  }
-
   componentDidMount() {
+    this.props.init(this.props.operation);
     if(this.props.operation === 'edit')
       document.getElementById('btnStudentUpdateSubmit').classList.add('pull-right');
   }
@@ -149,7 +145,7 @@ class StudentForm extends Component {
             <div className="input-group pull-right">
               <ImageDropzone id="bioImg" name="bio_img" overlay="picUploadOverlay bioPicUploadOverlay"
                             image={student.bio_img ?
-                                'client/assets/images/' + student.cohort_id + '/' + student.bio_img : null }
+                                'images/' + student.cohort_id + '/' + student.bio_img : null }
                             label="Bio Image"/>
             </div>
           </div>
@@ -158,7 +154,7 @@ class StudentForm extends Component {
             <div className="input-group">
               <ImageDropzone id="codesmithImg" name="codesmith_img" overlay="picUploadOverlay csPicUploadOverlay"
                             image={student.codesmith_img ?
-                                'client/assets/images/' + student.cohort_id + '/' + student.codesmith_img : null }
+                                'images/' + student.cohort_id + '/' + student.codesmith_img : null }
                             label="Codesmith Image"/>
             </div>
           </div>

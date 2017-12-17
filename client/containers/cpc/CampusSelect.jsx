@@ -23,7 +23,7 @@ class CampusSelect extends Component {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // Grab campus data from csdb
     this.props.getCampuses();
   }

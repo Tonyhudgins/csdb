@@ -15,3 +15,5 @@ export const ACTIVE    = 2;
 export const ALUMNI    = 3;
 export const DEFERRED  = 4;
 export const INACTIVE  = 5;
+
+export const serverUrl = 'http://localhost:8085';

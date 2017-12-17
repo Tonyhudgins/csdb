@@ -1,0 +1,35 @@
+#menu {
+  margin: 20px 0 0 20px;
+}
+
+#menu h1 {
+  font-size: 1.5em;
+  font-weight: lighter;
+}
+
+#menu li {
+  font-size: 1.3em;
+  cursor: pointer;
+  line-height: 1.25em;
+}
+
+#menu li:hover {
+  font-size: 1.7em;
+  color: #4592c3;
+}
+
+#menu a:hover {
+  text-decoration: none;
+  color: #4592c3;
+}
+
+#menu ul {
+  margin-left: 20px;
+  list-style: none;
+  font-weight: lighter;
+}
+
+#menu a:active {
+  text-decoration: none;
+  color: orange;
+}

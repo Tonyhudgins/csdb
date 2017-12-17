@@ -182,10 +182,12 @@ function json(response) {
   Async fetch calls to the database
 */
 export const fetchCampusListThunk = (mode, operation) => dispatch => {
-  console.log(`in fetchCampusListThunk mode: ${mode}`);
+  console.log(`in fetchCampusListThunk mode: ${mode} operation: ${operation}`);
 
   // fetch the Campus list from csdb and dispatch accordingly
-  fetch('http://localhost:8080/campusList', { method: 'get' })
+  fetch(constants.serverUrl + '/campusList',
+      { method: 'get',
+        headers: new Headers({ 'Access-Control-Allow_Origin' : true }),})
     .then(status)
     .then(json)
     .then(function (responseData) {
@@ -217,7 +219,7 @@ export const fetchProgramListThunk = (campusId, mode, operation) => dispatch => 
   console.log(`in fetchProgramListThunk - campusId:${campusId} mode: ${mode}`);
 
   // fetch the Program list from csdb and dispatch accordingly
-  fetch('http://localhost:8080/programList',
+  fetch(constants.serverUrl + '/programList',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -253,7 +255,7 @@ export const fetchCohortListThunk = (programId, mode, operation) => dispatch => 
   console.log(`in fetchCohortListThunk - programId: ${programId} mode: ${mode} op: ${operation}`);
 
   // fetch the Cohort list from csdb and dispatch accordingly
-  fetch('http://localhost:8080/cohortList',
+  fetch(constants.serverUrl + '/cohortList',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -318,7 +320,7 @@ export const fetchStudentListThunk = (cohortId, studentId) => dispatch => {
 
   // fetch the Cohort list from csdb and dispatch accordingly
   const headers = new Headers({ 'Content-Type': 'application/json' });
-  fetch('http://localhost:8080/studentList',
+  fetch(constants.serverUrl + '/studentList',
     {
       method: 'post',
       headers,
@@ -364,7 +366,7 @@ export const postCurrentStudentThunk = (student) => dispatch => {
   console.log(`in postCurrentStudentThunk - studentId: ${student.student_id}`);
 
   // fetch the Cohort list from csdb and dispatch accordingly
-  fetch('http://localhost:8080/updateStudent',
+  fetch(constants.serverUrl + '/updateStudent',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -384,7 +386,7 @@ export const postCurrentStudentThunk = (student) => dispatch => {
 export const postNewStudentThunk = (student) => dispatch => {
   console.log(`in postNewStudentThunk - studentId: ${student.student_id}`);
 
-  fetch('http://localhost:8080/createStudent',
+  fetch(constants.serverUrl + '/createStudent',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -403,7 +405,7 @@ export const postNewStudentThunk = (student) => dispatch => {
 
 export const deleteCurrentStudentThunk = (status, student_id, cohort_id) => dispatch => {
     console.log(`in deleteStudentThunk - studentId:${student_id}`);
-    fetch('http://localhost:8080/updateStudent',
+    fetch(constants.serverUrl + '/updateStudent',
         {
             method: 'post',
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -434,7 +436,7 @@ export const postStudentImageThunk = (image, image_type, student_id, cohort_id) 
     data.append('image_type', image_type);
     data.append('cohort_id', cohort_id);
 
-    fetch('http://localhost:8080/imageUpload',
+    fetch(constants.serverUrl + '/imageUpload',
         {
             method: 'post',
             body: data,
@@ -453,7 +455,7 @@ export const postStudentImageThunk = (image, image_type, student_id, cohort_id) 
 export const postBulkStudentsThunk = (data, cohort_id) => dispatch => {
   console.log(`in postBulkStudentsThunk - cohortId: ${cohort_id} count:${data.length}`);
 
-  fetch('http://localhost:8080/bulkStudentsUpload',
+  fetch(constants.serverUrl + '/bulkStudentsUpload',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -475,7 +477,7 @@ export const postBulkStudentsThunk = (data, cohort_id) => dispatch => {
 export const postCurrentCohortThunk = (cohort) => dispatch => {
   console.log(`in postCurrentCohortThunk - studentId: ${cohort.cohort_id}`);
 
-  fetch('http://localhost:8080/updateCohort',
+  fetch(constants.serverUrl + '/updateCohort',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -492,7 +494,7 @@ export const postCurrentCohortThunk = (cohort) => dispatch => {
 export const postNewCohortThunk = (cohort) => dispatch => {
   console.log(`in postNewCohortThunk - cohortId: ${cohort.cohort_id}`);
 
-  fetch('http://localhost:8080/createCohort',
+  fetch(constants.serverUrl + '/createCohort',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -510,7 +512,7 @@ export const postNewCohortThunk = (cohort) => dispatch => {
 export const postCurrentProgramThunk = (program) => dispatch => {
   console.log(`in postCurrentProgramThunk - studentId: ${program.program_id}`);
 
-  fetch('http://localhost:8080/updateProgram',
+  fetch(constants.serverUrl + '/updateProgram',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -527,7 +529,7 @@ export const postCurrentProgramThunk = (program) => dispatch => {
 export const postNewProgramThunk = (program) => dispatch => {
   console.log(`in postNewProgramThunk - programId: ${program.program_id}`);
 
-  fetch('http://localhost:8080/createProgram',
+  fetch(constants.serverUrl + '/createProgram',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -545,7 +547,7 @@ export const postNewProgramThunk = (program) => dispatch => {
 export const postCurrentCampusThunk = (campus) => dispatch => {
   console.log(`in postCurrentCampusThunk - studentId: ${campus.campus_id}`);
 
-  fetch('http://localhost:8080/updateCampus',
+  fetch(constants.serverUrl + '/updateCampus',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -562,7 +564,7 @@ export const postCurrentCampusThunk = (campus) => dispatch => {
 export const postNewCampusThunk = (campus) => dispatch => {
   console.log(`in postNewCampusThunk - campusId: ${campus.campus_id}`);
 
-  fetch('http://localhost:8080/createCampus',
+  fetch(constants.serverUrl + '/createCampus',
     {
       method: 'post',
       headers: new Headers({ 'Content-Type': 'application/json' }),

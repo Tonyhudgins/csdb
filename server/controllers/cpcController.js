@@ -33,19 +33,19 @@ const buildSQL = (query, where, ...values) => {
     like: ' LIKE ',
   };
 
-  console.log('in BuildSQL');
-  console.log(result);
-  console.log(where);
+  //console.log('in BuildSQL');
+  //console.log(result);
+  //console.log(where);
 
   if (where && typeof where === 'object') {
     result.queryString += where ? ' where' : '';
 
     Object.keys(where).forEach(function(operator) {
-      console.log('operator', operator);
+      //console.log('operator', operator);
       Object.keys(where[operator]).forEach(function (criteria) {
         const value = where[operator][criteria];
-        console.log('criteria', criteria);
-        console.log('value', value);
+        //console.log('criteria', criteria);
+        //console.log('value', value);
         result.queryString += ` ${criteria} ${operators[operator]} $${result.values.length + 1} and`;
         result.values.push(value);
       });
@@ -54,21 +54,21 @@ const buildSQL = (query, where, ...values) => {
     result.queryString = result.queryString.replace(/and$/, '');
   }
 
-  console.log('SCHNO >> ', result);
+  //console.log('SCHNO >> ', result);
 
   return result;
 };
 
 const buildUpdate = (query, data, where) => {
-  console.log('in buildUpdate');
+  //console.log('in buildUpdate');
   const result = {
     queryString: query,
     values: [],
   };
 
-  console.log('query', query);
-  console.log('data', data);
-  console.log('where', where);
+  //console.log('query', query);
+  //console.log('data', data);
+  //console.log('where', where);
 
   if (data && typeof data === 'object') {
     Object.keys(data).forEach(function (field) {
