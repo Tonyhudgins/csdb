@@ -8,8 +8,6 @@
     "dev": "NODE_ENV=development node ./server/server.js",
     "watch": "webpack -w ./client/index.js ./dist/bundle.js",
     "build": "webpack -p",
-    "dev:hotold": "webpack-dev-server --config ./webpack/dev.config.js --hot --inline --progress --colors --watch --content-base ./",
-    "dev:hot": "webpack-dev-server",
     "test": "mocha --compilers js:babel-core/register -w test/helpers/browser.js test/*.spec.js"
   },
   "keywords": [],

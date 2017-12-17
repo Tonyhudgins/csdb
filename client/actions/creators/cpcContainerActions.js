@@ -12,6 +12,8 @@
 import * as types from '../actionTypes';
 import * as constants from '../../constants';
 
+import fetch from 'isomorphic-fetch';
+
 /*
  ACTIONS - These get dispatched to the appropriate reducers to update state
 */
