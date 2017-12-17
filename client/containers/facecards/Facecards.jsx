@@ -54,7 +54,7 @@ class Facecards extends Component {
           showName={showName}
           firstName={this.props.studentsById[student].first_name}
           lastName={this.props.studentsById[student].last_name}
-          img={'./client/assets/images/' + this.props.currentCohort + '/' + this.props.studentsById[student].bio_img}
+          img={'images/' + this.props.currentCohort + '/' + this.props.studentsById[student].bio_img}
         />
       ));
     }
